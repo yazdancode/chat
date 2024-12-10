@@ -1,14 +1,14 @@
 {% extends  'layouts/a.html' %}
 
 {% block content %}
-
+{% for post in posts %}
 <article class="card bg-white shadow-lg rounded-lg overflow-hidden mb-6">
                 <div class="flex items-center justify-between px-4 h-14">
-                    <h3 class="text-start leading-5 ml-1">جدی کوچک</h3>
+                    <h3 class="text-start leading-5 ml-1">{{ post.title }}</h3>
                     <div class="text-sm text-gray-400 truncate">فلیکر<a href="#" class="hover:underline mr-1" target="_blank">@جان دو</a></div>
                 </div>
                 <figure>
-                    <a href="#"><img class="w-full" src="https://live.staticflickr.com/65535/50618365686_36f887ab88_c.jpg" alt="Sample Image"></a>
+                    <a href="#"><img class="w-full" src="{{ post.image }}" alt="post"></a>
                 </figure>
                 <div class="p-4 pb-2">
                     <a class="flex items-center gap-1 mb-4" href="#">
@@ -16,7 +16,7 @@
                         <span class="font-bold hover:underline">لیزا</span>
                         <span class="text-sm text-gray-400">@لیزاسیمپسون</span>
                     </a>
-                    <p class="text-5xl mb-10 px-4 font1">گربه جدی از خیابان محافظت می‌کند</p>
+                    <p class="text-5xl mb-10 px-4 font1">{{ post.body }}</p>
                     <div class="flex items-center gap-2 text-sm mb-5 flex-wrap">
                         <a href="#" class="bg-gray-200 rounded-full px-3 py-1 hover:bg-gray-800 hover:text-white">حیوانات</a>
                         <a href="#" class="bg-gray-200 rounded-full px-3 py-1 hover:bg-gray-800 hover:text-white">سیاه و سفید</a>
@@ -38,5 +38,6 @@
                     </div>
                 </div>
 </article>
+{% endfor %}
 
 {% endblock %}

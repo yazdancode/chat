@@ -1,12 +1,11 @@
 # Byte-compiled / optimized / DLL files
-.vscode
-*.sqlite
 __pycache__/
 *.py[cod]
 *$py.class
-*.swp
-# C extensions
 *.so
+
+# Temporary files
+*.swp
 
 # Distribution / packaging
 .Python
@@ -55,17 +54,17 @@ coverage.xml
 *.mo
 *.pot
 
-# Django stuff:
+# Django files
 *.log
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
 
-# Flask stuff:
+# Flask files
 instance/
 .webassets-cache
 
-# Scrapy stuff:
+# Scrapy files
 .scrapy
 
 # Sphinx documentation
@@ -85,19 +84,19 @@ ipython_config.py
 .python-version
 
 # pipenv
-#Pipfile.lock
+Pipfile.lock
 
 # PEP 582
 __pypackages__/
 
-# Celery stuff
+# Celery
 celerybeat-schedule
 celerybeat.pid
 
-# SageMath parsed files
+# SageMath
 *.sage.py
 
-# Environments
+# Virtual environments
 .env
 .venv
 env/
@@ -106,30 +105,36 @@ ENV/
 env.bak/
 venv.bak/
 
-# Spyder project settings
+# Spyder IDE
 .spyderproject
 .spyproject
 
-# Rope project settings
+# Rope project
 .ropeproject
 
-# mkdocs documentation
+# MkDocs
 /site
 
-# mypy
+# MyPy
 .mypy_cache/
 .dmypy.json
 dmypy.json
 
-# Pyre type checker
+# Pyre
 .pyre/
 
 # OS-specific files
 *.DS_Store
-*.iml
+
+# JetBrains IDEs
 .idea/
-*.xlsx
-path to the file which used by sqlite
-*.yml
 *.iml
-.env
+
+# Excel files
+*.xlsx
+
+# YAML configuration
+*.yml
+
+# Migrations (if dynamic migration files exist)
+Post/migrations/
