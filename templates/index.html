@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>عکس‌های شگفت‌انگیز</title>
+    <link rel="shortcut icon" type="image/png" href="https://img.icons8.com/small/64/000000/fire-heart.png"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style type="text/tailwindcss">
+        /* Existing styles with some RTL adjustments */
+        :root {
+            --primary: rgb(88, 40, 244);
+            --primary-hover: rgb(69, 29, 200);
+            --black: #1f2937;
+            --font1: 'Vazirmatn', sans-serif;
+        }
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            direction: rtl;
+        }
+        /* Rest of the previous CSS remains the same, with minor RTL tweaks */
+        .navitems>li>a {
+            @apply flex items-center gap-2 h-12 px-4 hover:bg-gray-700 rounded-lg flex-row-reverse;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+<header x-data="{ mobilenavOpen: false }" class="md:flex items-center justify-between [&>*]:px-8 bg-gray-800 h-20 text-white sticky top-0 z-40">
+    <div class="flex items-center justify-between h-20">
+        <logo>
+            <a class="flex items-center gap-1" href="/">
+                <img class="w-7 -mt-1" src="https://img.icons8.com/small/64/ffffff/fire-heart.png"/>
+                <span class="text-lg font-bold">عکس‌های شگفت‌انگیز</span>
+            </a>
+        </logo>
+        <mobileicon class="md:hidden">
+            <a @click="mobilenavOpen = !mobilenavOpen" class="h-12 w-12 flex items-center justify-center cursor-pointer hover:bg-gray-700 rounded-lg">
+                <img x-show="!mobilenavOpen" class="w-6 h-6 select-none" src="https://img.icons8.com/small/64/ffffff/menu.png"/> 
+                <img x-show="mobilenavOpen" x-cloak class="w-6 h-6 select-none" src="https://img.icons8.com/small/64/ffffff/delete-sign.png"/>
+            </a>
+        </mobileicon>
+    </div>
+    <nav x-show="mobilenavOpen" x-cloak class="md:!block bg-gray-800 h-screen w-screen md:h-auto md:w-auto -mt-20 md:mt-0 absolute md:relative z-[-1]"
+    x-transition:enter="duration-300 ease-out"
+    x-transition:enter-start="opacity-0 -translate-y-96"
+    x-transition:enter-end="opacity-100 translate-y-0">
+        <ul class="flex items-center navitems flex-col md:flex-row gap-8 md:gap-0 justify-center h-full -translate-y-10 md:translate-y-0">
+            <li><a href="/">خانه</a></li>
+            <li><a href="">ایجاد پست</a></li>
+            <li x-data="{ dropdownOpen: false }" class="relative">
+                <a @click="dropdownOpen = !dropdownOpen" @click.away="dropdownOpen = false" class="cursor-pointer select-none">
+                    <img class="h-8 w-8 rounded-full object-cover ml-2" src="https://pbs.twimg.com/profile_images/508601156767997952/fFTdKUf2_400x400.jpeg"/>
+                    بارت
+                    <img x-bind:class="dropdownOpen && 'rotate-180 duration-300'" class="w-4 mr-1" src="https://img.icons8.com/small/32/777777/expand-arrow.png"/>
+                </a>
+                <div x-show="dropdownOpen" x-cloak class="absolute left-0 bg-white text-black shadow rounded-lg w-40 p-2 z-20"
+                x-transition:enter="duration-300 ease-out"
+                x-transition:enter-start="opacity-0 -translate-y-5 scale-90"
+                x-transition:enter-end="opacity-100 translate-y-0 scale-100">
+                    <ul class="hoverlist [&>li>a]:justify-end">
+                        <li><a href="">پروفایل من</a></li>
+                        <li><a href="">ویرایش پروفایل</a></li>
+                        <li><a href="">خروج</a></li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+<hero class="grid bg-gray-700 text-white text-center bg-cover z-10 relative bg-[url('https://live.staticflickr.com/65535/49909538937_3255dcf9e7_b.jpg')]">
+    <div class="col-start-1 row-start-1 bg-gray-800 bg-opacity-40 w-full h-full"></div>
+    <div class="col-start-1 row-start-1 py-24 px-10 ">
+        <h1 class="font1 text-6xl title-fadein">{{ greeting }}</h1>
+        <p class="text-lg font-bold mb-5">عکس‌های محبوب خود را از فلیکر به اشتراک بگذارید و کپشن جذابی برایشان بنویسید</p>
+        <a class="button" href="">شروع کنید</a>
+    </div>
+</hero>
+
+<content x-data="{ mobileSidebarOpen: false }" class="grid grid-cols-3 max-w-7xl mx-auto my-6 px-6">
+    <mobileSidebarNav class="md:hidden col-span-full mx-auto mb-6 z-10 relative">
+        <a @click="mobileSidebarOpen = !mobileSidebarOpen" class="flex items-center cursor-pointer select-none font-bold hover:bg-gray-200 rounded-lg p-3">
+            <span>دسته‌بندی‌ها</span>
+            <img x-bind:class="mobileSidebarOpen && 'rotate-180 duration-300'" class="w-4 mr-1" src="https://img.icons8.com/small/32/000000/expand-arrow.png" />
+        </a>
+    </mobileSidebarNav>
+    <main class="col-span-full md:col-span-2 md:mr-[5%] lg:mx-[10%] order-2 md:order-1">
+        <article class="card">
+            <div class="flex items-center justify-between px-4 h-14">
+                <h3 class="text-start leading-5 ml-1">جدی کوچک</h3>
+                <div class="text-sm text-gray-400 truncate">فلیکر<a href="" class="hover:underline mr-1" target="blank">@جان دو</a></div>
+            </div>
+            <figure>
+                <a href=""><img class="w-full" src="https://live.staticflickr.com/65535/50618365686_36f887ab88_c.jpg"></a>
+            </figure>
+            <div class="p-4 pb-2">
+                <a class="flex items-center gap-1 mb-4" href="">
+                    <img class="w-8 h-8 object-cover rounded-full" src="https://img.icons8.com/small/96/A9A9A9/happy.png">
+                    <span class="font-bold hover:underline">لیزا</span>
+                    <span class="text-sm text-gray-400">@لیزاسیمپسون</span>
+                </a>
+                <p class="text-5xl mb-10 px-4 font1">گربه جدی از خیابان محافظت می‌کند</p>
+                <div class="flex items-center gap-2 text-sm mb-5 flex-wrap">
+                    <a href="" class="bg-gray-200 rounded-full px-3 py-1 hover:bg-gray-800 hover:text-white">حیوانات</a>
+                    <a href="" class="bg-gray-200 rounded-full px-3 py-1 hover:bg-gray-800 hover:text-white">سیاه و سفید</a>
+                </div>
+                <div class="flex items-center justify-between text-sm px-2">
+                    <a class="font-bold hover:underline" href="">
+                        نظرات
+                        <span class="font-light text-gray-500 mr-1">۳</span>
+                    </a>
+                    <div class="flex items-center gap-4 [&>a:hover]:underline">
+                        <div class="flex items-center gap-1">
+                            <img class="w-5 -mt-1" src="https://img.icons8.com/small/24/000000/fire-heart.png">
+                            ۱
+                        </div>
+                        <a href="">لایک</a>
+                        <a href="">ویرایش</a>
+                        <a href="">حذف</a>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </main>
+    <aside x-show="mobileSidebarOpen" x-cloak class="md:!block col-span-full md:col-span-1 lg:mr-[20%] order-1 md:order-2"
+    x-transition:enter="duration-300 ease-out"
+    x-transition:enter-start="opacity-0 -mt-96"
+    x-transition:enter-end="opacity-100 mt-0">
+        <section class="card p-4">
+            <h2>دسته‌بندی‌ها</h2>
+            <ul class="hoverlist">
+                <li class="highlight">
+                    <a href="" class="flex-row-reverse">
+                        <img class="w-8 h-8 object-cover ml-2" src="https://img.icons8.com/small/96/null/landscape.png">
+                        <span class="font-bold text-sm">مناظر</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="" class="flex-row-reverse">
+                        <img class="w-8 h-8 object-cover ml-2" src="https://img.icons8.com/small/96/null/portrait.png">
+                        <span class="font-bold text-sm">افراد</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="" class="flex-row-reverse">
+                        <img class="w-8 h-8 object-cover ml-2" src="https://img.icons8.com/small/96/null/dog.png">
+                        <span class="font-bold text-sm">حیوانات</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="" class="flex-row-reverse">
+                        <img class="w-8 h-8 object-cover ml-2" src="https://img.icons8.com/small/96/null/180-degrees.png">
+                        <span class="font-bold text-sm">سیاه و سفید</span>
+                    </a>
+                </li>
+            </ul>
+        </section>
+        <section class="card p-4">
+            <div class="flex items-center">
+                <img class="w-7 ml-2 -mt-3" src="https://img.icons8.com/ios-glyphs/90/null/fire-heart.png"/>
+                <h2>پست‌های برتر</h2>
+            </div>
+            <ul class="hoverlist">
+                <li>
+                    <a href="" class="flex items-stretch justify-between flex-row-reverse">
+                        <div class="flex items-center truncate">
+                            <img class="w-10 h-10 rounded-lg object-cover ml-3 shrink-0" src="https://live.staticflickr.com/65535/50618365686_36f887ab88_c.jpg">
+                            <img class="w-6 h-6 rounded-full object-cover ml-1" src="https://img.icons8.com/small/96/A9A9A9/happy.png">
+                            <span class="font-bold text-sm ml-1">هومر</span>
+                        </div>
+                        <span class="text-sm font-light text-grey-500 shrink-0">۳ لایک / ۱</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="" class="flex items-stretch justify-between flex-row-reverse">
+                        <div class="flex items-center truncate">
+                            <img class="w-10 h-10 rounded-lg object-cover ml-3" src="https://live.staticflickr.com/65535/50618365686_36f887ab88_c.jpg">
+                            <img class="w-6 h-6 rounded-full object-cover ml-1" src="https://img.icons8.com/small/96/A9A9A9/happy.png">
+                            <span class="font-bold text-sm ml-1">هومر</span>
+                        </div>
+                        <span class="text-sm font-light text-grey-500 shrink-0">۳ لایک / ۱</span>
+                    </a>
+                </li>
+            </ul>
+        </section>
+        <section class="card p-4">
+            <div class="flex items-center">
+                <img class="w-7 ml-2 -mt-3" src="https://img.icons8.com/ios-glyphs/90/null/fire-heart.png"/>
+                <h2>نظرات برتر</h2>
+            </div>
