@@ -14,7 +14,7 @@
         {{ form.as_p }}
 
         <button type="submit" class="mt-1 bg-blue-500 text-white p-2 rounded-md hover:bg-blue-700">ارسال پست</button>
-        <a class="button secondaryAction ml-1 p-2 text-gray-600 border rounded-md" href="">لغو</a>
+        <a class="button secondaryAction ml-1 p-2 text-gray-600 border rounded-md" href="{{ request.META.HTTP_REFERER }}">لغو</a>
     </form>
 </div>
 
