@@ -1,0 +1,42 @@
+{% extends  'layouts/a.html' %}
+
+{% block content %}
+
+<article class="card bg-white shadow-lg rounded-lg overflow-hidden mb-6">
+                <div class="flex items-center justify-between px-4 h-14">
+                    <h3 class="text-start leading-5 ml-1">جدی کوچک</h3>
+                    <div class="text-sm text-gray-400 truncate">فلیکر<a href="#" class="hover:underline mr-1" target="_blank">@جان دو</a></div>
+                </div>
+                <figure>
+                    <a href="#"><img class="w-full" src="https://live.staticflickr.com/65535/50618365686_36f887ab88_c.jpg" alt="Sample Image"></a>
+                </figure>
+                <div class="p-4 pb-2">
+                    <a class="flex items-center gap-1 mb-4" href="#">
+                        <img class="w-8 h-8 object-cover rounded-full" src="https://img.icons8.com/small/96/A9A9A9/happy.png" alt="User Image">
+                        <span class="font-bold hover:underline">لیزا</span>
+                        <span class="text-sm text-gray-400">@لیزاسیمپسون</span>
+                    </a>
+                    <p class="text-5xl mb-10 px-4 font1">گربه جدی از خیابان محافظت می‌کند</p>
+                    <div class="flex items-center gap-2 text-sm mb-5 flex-wrap">
+                        <a href="#" class="bg-gray-200 rounded-full px-3 py-1 hover:bg-gray-800 hover:text-white">حیوانات</a>
+                        <a href="#" class="bg-gray-200 rounded-full px-3 py-1 hover:bg-gray-800 hover:text-white">سیاه و سفید</a>
+                    </div>
+                    <div class="flex items-center justify-between text-sm px-2">
+                        <a class="font-bold hover:underline" href="#">
+                            نظرات
+                            <span class="font-light text-gray-500 mr-1">۳</span>
+                        </a>
+                        <div class="flex items-center gap-4">
+                            <div class="flex items-center gap-1">
+                                <img class="w-5 -mt-1" src="https://img.icons8.com/small/24/000000/fire-heart.png" alt="Heart Icon">
+                                ۱
+                            </div>
+                            <a href="#">لایک</a>
+                            <a href="#">ویرایش</a>
+                            <a href="#">حذف</a>
+                        </div>
+                    </div>
+                </div>
+</article>
+
+{% endblock %}

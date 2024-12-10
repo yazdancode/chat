@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>عکس‌های شگفت‌انگیز</title>
+    <link rel="shortcut icon" type="image/png" href="https://img.icons8.com/small/64/000000/fire-heart.png"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style type="text/tailwindcss">
+        :root {
+            --primary: rgb(88, 40, 244);
+            --primary-hover: rgb(69, 29, 200);
+            --black: #1f2937;
+            --font1: 'Vazirmatn', sans-serif;
+        }
+        body {
+            font-family: var(--font1);
+            direction: rtl;
+        }
+        .navitems > li > a {
+            @apply flex items-center gap-2 h-12 px-4 hover:bg-gray-700 rounded-lg flex-row-reverse;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <!-- Header -->
+    {% include 'includes/header.html' %}
+
+    <!-- Hero Section -->
+    {% include  'includes/hero.html' %}
+
+    {% block layout %}
+    {% endblock %}
+
+</body>
+</html>
