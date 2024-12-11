@@ -5,11 +5,19 @@ from Post.models import Post
 class PostCreateForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ["title", "body", "image"]
+        fields = [
+            "title",
+            "body",
+            # "image",
+            "url",
+            # "artist"
+        ]
         labels = {
             "title": "عنوان",
             "body": "متن",
-            "image": "تصویر",
+            # "image": "تصویر",
+            "url": "لینک تصویر",
+            # "artist": "هنرمند"
         }
         widgets = {
             "title": forms.TextInput(
@@ -27,24 +35,38 @@ class PostCreateForm(forms.ModelForm):
                     "placeholder": "توضیحات خود را اضافه کنید...",
                 }
             ),
-            "image": forms.URLInput(
+            # "image": forms.URLInput(
+            #     attrs={
+            #         "class": "form-control",
+            #         "style": "background-color: #e3f2fd; font-size: 14px; border: 1px solid #90caf9; padding: 8px; border-radius: 4px;",
+            #         "placeholder": "لینک تصویر را وارد کنید",
+            #     }
+            # ),
+            "url": forms.TextInput(
                 attrs={
                     "class": "form-control",
                     "style": "background-color: #e3f2fd; font-size: 14px; border: 1px solid #90caf9; padding: 8px; border-radius: 4px;",
                     "placeholder": "لینک تصویر را وارد کنید",
                 }
             ),
+            # "artist": forms.TextInput(
+            #     attrs={
+            #         "class": "form-control",
+            #         "style": "background-color: #e3f2fd; font-size: 14px; border: 1px solid #90caf9; padding: 8px; border-radius: 4px;",
+            #         "placeholder": "لینک هنرمند را وارد کنید",
+            #     }
+            # )
         }
-        error_messages = {
-            "title": {
-                "required": "لطفاً عنوان را وارد کنید.",
-                "max_length": "عنوان نمی‌تواند طولانی‌تر از مقدار مجاز باشد.",
-            },
-            "body": {
-                "required": "لطفاً متن را وارد کنید.",
-            },
-            "image": {
-                "required": "لطفاً لینک تصویر را وارد کنید.",
-                "invalid": "لینک تصویر معتبر نیست.",
-            },
-        }
+        # error_messages = {
+        #     "title": {
+        #         "required": "لطفاً عنوان را وارد کنید.",
+        #         "max_length": "عنوان نمی‌تواند طولانی‌تر از مقدار مجاز باشد.",
+        #     },
+        #     "body": {
+        #         "required": "لطفاً متن را وارد کنید.",
+        #     },
+        #     "image": {
+        #         "required": "لطفاً لینک تصویر را وارد کنید.",
+        #         "invalid": "لینک تصویر معتبر نیست.",
+        #     },
+        # }
