@@ -1,8 +1,9 @@
 from django import forms
+from django.forms import ModelForm
 from Post.models import Post
 
 
-class PostCreateForm(forms.ModelForm):
+class PostCreateForm(ModelForm):
     class Meta:
         model = Post
         fields = [
@@ -70,3 +71,22 @@ class PostCreateForm(forms.ModelForm):
         #         "invalid": "لینک تصویر معتبر نیست.",
         #     },
         # }
+
+
+class PostEditForm(ModelForm):
+    class Meta:
+        model = Post
+        fields = [
+            "body",
+        ]
+        labels = {
+            "body": "",
+        }
+        widgets = {
+            "body": forms.Textarea(
+                attrs={
+                    "rows": 3,
+                    "class": "font1 text-4xl",
+                }
+            ),
+        }

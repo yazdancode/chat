@@ -1,11 +1,15 @@
 import requests
 from bs4 import BeautifulSoup
+from django.contrib import messages
+from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponse
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView
-from django.contrib import messages
-from Post.form import PostCreateForm
+from django.views.generic.edit import DeleteView, UpdateView
+
+from Post.form import PostCreateForm, PostEditForm
 from Post.models import Post
 
 
@@ -91,15 +95,53 @@ class PostCreateView(View):
 
 
 # TODO: function with test written There is a readability in the code at all
-def post_delete_view(request, pk):
-    post = get_object_or_404(Post, id=pk)
+# def post_delete_view(request, pk):
+#     post = get_object_or_404(Post, id=pk)
+#
+#     if request.method == "POST":
+#         post.delete()
+#         messages.success(request, "پست با موفقیت حذف شد")
+#         return redirect("home")
+#     return render(request, "posts/post_delete.html", {"post": post})
 
-    if request.method == "POST":
-        post.delete()
-        messages.success(request, "پست با موفقیت حذف شد")
-        return redirect("home")
-    return render(request, "posts/post_delete.html", {"post": post})
+
+class PostDeleteView(SuccessMessageMixin, DeleteView):
+    model = Post
+    template_name = "posts/post_delete.html"
+    success_url = reverse_lazy("home")
+    success_message = "پست با موفقیت حذف شد"
+
+    def delete(self, request, *args, **kwargs):
+        # Custom delete logic or additional processing (if needed)
+        messages.success(self.request, self.success_message)
+        return super().delete(request, *args, **kwargs)
 
 
-# class DeleteView(View):
-#     template_name = "posts/post_delete.html"
+# TODO: function with test written There is a readability in the code at all
+# def post_edit_view(request, pk):
+#     post = Post.objects.get(pk=pk)
+#     form = PostEditForm(instance=post)
+#     context = {
+#         'post': post,
+#         'form': form
+#     }
+#     if request.method == 'POST':
+#         form = PostEditForm(request.POST, instance=post)
+#         if form.is_valid():
+#             form.save()
+#             messages.success(request, 'Post updated')
+#             return redirect('home')
+#     return render(request, 'posts/post_edit.html', context=context)
+
+
+class PostUpdateView(SuccessMessageMixin, UpdateView):
+    model = Post
+    form_class = PostEditForm
+    template_name = "posts/post_edit.html"
+    success_url = reverse_lazy("home")
+    success_message = "پست به روز شد"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["post"] = self.object
+        return context
