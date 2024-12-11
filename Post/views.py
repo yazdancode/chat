@@ -1,10 +1,10 @@
 import requests
 from bs4 import BeautifulSoup
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.views.generic import ListView
-
+from django.contrib import messages
 from Post.form import PostCreateForm
 from Post.models import Post
 
@@ -88,3 +88,18 @@ class PostCreateView(View):
                     f"An error occurred while processing the URL: {e}", status=400
                 )
         return render(request, self.template_name, {"form": form})
+
+
+# TODO: function with test written There is a readability in the code at all
+def post_delete_view(request, pk):
+    post = get_object_or_404(Post, id=pk)
+
+    if request.method == "POST":
+        post.delete()
+        messages.success(request, "پست با موفقیت حذف شد")
+        return redirect("home")
+    return render(request, "posts/post_delete.html", {"post": post})
+
+
+# class DeleteView(View):
+#     template_name = "posts/post_delete.html"
