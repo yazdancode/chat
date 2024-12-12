@@ -2,12 +2,12 @@ import requests
 from bs4 import BeautifulSoup
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
-from django.views.generic.detail import DetailView
 from django.http import HttpResponse
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView
+from django.views.generic.detail import DetailView
 from django.views.generic.edit import DeleteView, UpdateView
 
 from Post.form import PostCreateForm, PostEditForm
@@ -113,7 +113,6 @@ class PostDeleteView(SuccessMessageMixin, DeleteView):
     success_message = "پست با موفقیت حذف شد"
 
     def delete(self, request, *args, **kwargs):
-        # Custom delete logic or additional processing (if needed)
         messages.success(self.request, self.success_message)
         return super().delete(request, *args, **kwargs)
 
@@ -139,7 +138,7 @@ class PostEditView(UpdateView):
     model = Post
     form_class = PostEditForm
     template_name = "posts/post_edit.html"
-    success_url = reverse_lazy("home")  # Replace 'home' with your desired URL name.
+    success_url = reverse_lazy("home")
 
     def form_valid(self, form):
         messages.success(self.request, "Post updated successfully!")
