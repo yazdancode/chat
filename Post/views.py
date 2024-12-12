@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
+from django.views.generic.detail import DetailView
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
@@ -134,27 +135,24 @@ class PostDeleteView(SuccessMessageMixin, DeleteView):
 #     return render(request, 'posts/post_edit.html', context=context)
 
 
-class PostUpdateView(SuccessMessageMixin, UpdateView):
+class PostEditView(UpdateView):
     model = Post
     form_class = PostEditForm
     template_name = "posts/post_edit.html"
-    success_url = reverse_lazy("home")
-    success_message = "پست به روز شد"
+    success_url = reverse_lazy("home")  # Replace 'home' with your desired URL name.
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["post"] = self.object
-        return context
+    def form_valid(self, form):
+        messages.success(self.request, "Post updated successfully!")
+        return super().form_valid(form)
 
 
 # TODO: function with test written There is a readability in the code at all
-def post_page_view(request, pk):
-    post = get_object_or_404(Post, id=pk)
-    return render(request, "posts/post_page.html", {"post": post})
+# def post_page_view(request, pk):
+#     post = get_object_or_404(Post, id=pk)
+#     return render(request, "posts/post_page.html", {"post": post})
 
 
-# class PostView(View):
-#     template_name = "posts/post_page.html"
-#     def get(self, request, pk):
-#         post = Post.objects.get(id=pk)
-#         return render(request, self.template_name, {"post": post})
+class PostDetailView(DetailView):
+    model = Post
+    template_name = "posts/post_page.html"
+    context_object_name = "post"
