@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView
@@ -96,7 +96,7 @@ class PostCreateView(View):
 
 # TODO: function with test written There is a readability in the code at all
 # def post_delete_view(request, pk):
-#     post = get_object_or_404(Post, id=pk)
+# post = get_object_or_404(Post, id=pk)
 #
 #     if request.method == "POST":
 #         post.delete()
@@ -119,7 +119,7 @@ class PostDeleteView(SuccessMessageMixin, DeleteView):
 
 # TODO: function with test written There is a readability in the code at all
 # def post_edit_view(request, pk):
-#     post = Post.objects.get(pk=pk)
+#     post = get_object_or_404(Post, id=pk)
 #     form = PostEditForm(instance=post)
 #     context = {
 #         'post': post,
@@ -145,3 +145,16 @@ class PostUpdateView(SuccessMessageMixin, UpdateView):
         context = super().get_context_data(**kwargs)
         context["post"] = self.object
         return context
+
+
+# TODO: function with test written There is a readability in the code at all
+def post_page_view(request, pk):
+    post = get_object_or_404(Post, id=pk)
+    return render(request, "posts/post_page.html", {"post": post})
+
+
+# class PostView(View):
+#     template_name = "posts/post_page.html"
+#     def get(self, request, pk):
+#         post = Post.objects.get(id=pk)
+#         return render(request, self.template_name, {"post": post})
