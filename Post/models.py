@@ -8,6 +8,7 @@ class Post(models.Model):
     artist = models.CharField(max_length=500, null=True)
     url = models.URLField(max_length=500, null=True, blank=True)
     body = models.TextField()
+    tags = models.ManyToManyField("Tag")
     created = models.DateTimeField(auto_now_add=True)
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     updated_at = models.DateTimeField(auto_now=True)
@@ -17,3 +18,15 @@ class Post(models.Model):
 
     class Meta:
         ordering = ["-created"]
+
+
+class Tag(models.Model):
+    name = models.CharField(max_length=50)
+    slug = models.SlugField(max_length=20, unique=True)
+    order = models.IntegerField(null=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        ordering = ["order"]

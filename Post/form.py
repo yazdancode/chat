@@ -12,6 +12,7 @@ class PostCreateForm(ModelForm):
             # "image",
             "url",
             # "artist"
+            "tags",
         ]
         labels = {
             "title": "عنوان",
@@ -19,6 +20,7 @@ class PostCreateForm(ModelForm):
             # "image": "تصویر",
             "url": "لینک تصویر",
             # "artist": "هنرمند"
+            "tags": "برچسب ها",
         }
         widgets = {
             "title": forms.TextInput(
@@ -57,6 +59,7 @@ class PostCreateForm(ModelForm):
             #         "placeholder": "لینک هنرمند را وارد کنید",
             #     }
             # )
+            "tags": forms.CheckboxSelectMultiple(),
         }
         # error_messages = {
         #     "title": {
@@ -78,9 +81,11 @@ class PostEditForm(ModelForm):
         model = Post
         fields = [
             "body",
+            "tags",
         ]
         labels = {
             "body": "",
+            "tags": "برچسب ها",
         }
         widgets = {
             "body": forms.Textarea(
@@ -89,4 +94,5 @@ class PostEditForm(ModelForm):
                     "class": "font1 text-4xl",
                 }
             ),
+            "tags": forms.CheckboxSelectMultiple(),
         }

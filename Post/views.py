@@ -9,25 +9,62 @@ from django.views import View
 from django.views.generic import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import DeleteView, UpdateView
-
+from django.shortcuts import get_object_or_404
 from Post.form import PostCreateForm, PostEditForm
-from Post.models import Post
+from Post.models import Post, Tag
 
 
 # TODO : function with test written There is no readability in the code at all
-# def home_view(request, **kwargs):
-#     posts = Post.objects.all()
+# def home_view(request, **kwargs, tag=None):
+#      if tag:
+#          post = Post.objects.filter(tags__slug=tag)
+#          tag = get_object_or_404(Tag, slug=tag)
+#     else:
+#         posts = Post.objects.all()
+#     categories = Tag.objects.all()
 #
-#     return render(request, 'posts/home.html', {'posts': posts})
-class HomeView(ListView):
-    template_name = "posts/home.html"
-    model = Post
-    context_object_name = "posts"
+#     cocontext= {
+#         'posts': posts,
+#         'categories': categories,
+#     }
+#     return render(request, 'posts/home.html', cocontext=cocontext)
 
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context["greeting"] = "سلام، به وب سایت ما خوش آمدید!"
-    #     return context
+
+class HomeView(ListView):
+    model = Post
+    template_name = "posts/home.html"
+    context_object_name = "posts"
+    paginate_by = 10
+
+    def get_queryset(self):
+        tag_slug = self.kwargs.get("tag")
+        if tag_slug:
+            self.tag = get_object_or_404(Tag, slug=tag_slug)
+            return Post.objects.filter(tags__slug=tag_slug)
+        return Post.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["categories"] = Tag.objects.all()
+        if hasattr(self, "tag"):
+            context["selected_tag"] = self.tag
+        return context
+
+
+# TODO: function with test written There is a readability in the code at all
+# # def category_view(request, tag):
+# #     posts = Post.objects.filter(tags__slug=tag)
+# #     return render(request, "posts/home.html", {"posts": posts})
+#
+#
+# class CategoryView(ListView):
+#     model = Post
+#     template_name = "posts/home.html"
+#     context_object_name = "posts"
+#
+#     def get_queryset(self):
+#         tag = self.kwargs.get("tag")
+#         return Post.objects.filter(tags__slug=tag)
 
 
 # TODO: function with test written There is a readability in the code at all
@@ -51,6 +88,7 @@ class HomeView(ListView):
 #             artist = find_artist[0].text.strip()
 #             post.artist = artist
 #             post.save()
+#             from .save_m2m()
 #             return redirect("home")
 #     return render(request, "posts/post_create_view.html", {"form": form})
 
@@ -68,31 +106,40 @@ class PostCreateView(View):
             try:
                 post = form.save(commit=False)
                 url = form.cleaned_data["url"]
-                response = requests.get(url, timeout=10)
-                response.raise_for_status()
-                source_code = BeautifulSoup(response.text, "html.parser")
-                image_meta = source_code.select(
-                    'meta[content^="https://live.staticflickr.com/"]'
-                )
-                post.image = image_meta[0]["content"] if image_meta else None
-                title_element = source_code.select("h1.photo-title")
-                post.title = (
-                    title_element[0].text.strip() if title_element else "Unknown Title"
-                )
-                artist_element = source_code.select("a.owner-name")
-                post.artist = (
-                    artist_element[0].text.strip()
-                    if artist_element
-                    else "Unknown Artist"
-                )
-                post.save()
-                return redirect("home")
+                if not url:
+                    raise ValueError("URL cannot be empty.")
 
-            except (requests.RequestException, IndexError) as e:
+                metadata = self.fetch_metadata(url)
+                post.image = metadata.get("image")
+                post.title = metadata.get("title", "Unknown Title")
+                post.artist = metadata.get("artist", "Unknown Artist")
+
+                post.save()
+                form.save_m2m()
+                return redirect("home")
+            except (requests.RequestException, IndexError, ValueError) as e:
                 return HttpResponse(
                     f"An error occurred while processing the URL: {e}", status=400
                 )
         return render(request, self.template_name, {"form": form})
+
+    @staticmethod
+    def fetch_metadata(url):
+        response = requests.get(url, timeout=10)
+        response.raise_for_status()
+        source_code = BeautifulSoup(response.text, "html.parser")
+
+        image_meta = source_code.select(
+            'meta[content^="https://live.staticflickr.com/"]'
+        )
+        title_element = source_code.select("h1.photo-title")
+        artist_element = source_code.select("a.owner-name")
+
+        return {
+            "image": image_meta[0]["content"] if image_meta else None,
+            "title": title_element[0].text.strip() if title_element else None,
+            "artist": artist_element[0].text.strip() if artist_element else None,
+        }
 
 
 # TODO: function with test written There is a readability in the code at all
