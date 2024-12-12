@@ -139,3 +139,5 @@ dmypy.json
 
 # Migrations (if dynamic migration files exist)
 Post/migrations/
+
+static/
