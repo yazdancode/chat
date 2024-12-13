@@ -3,6 +3,8 @@
         <div class="col-start-1 row-start-1 py-24 px-10">
             <h1 class="font1 text-6xl title-fadein">عکس ها و کپشن های فوق العاده</h1>
             <p class="text-lg font-bold mb-5">عکس‌های محبوب خود را از فلیکر به اشتراک بگذارید و کپشن جذابی برایشان بنویسید</p>
-            <a class="button bg-primary hover:bg-primary-hover text-white py-2 px-6 rounded-lg" href="#">شروع کنید</a>
+            {% if not user.is_authenticated %}
+            <a class="button bg-primary hover:bg-primary-hover text-white py-2 px-6 rounded-lg" href="{% url 'account_signup' %}">شروع کنید</a>
+            {% endif %}
         </div>
 </section>
