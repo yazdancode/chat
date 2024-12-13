@@ -138,6 +138,10 @@ dmypy.json
 *.yml
 
 # Migrations (if dynamic migration files exist)
+
+#New applications
 Post/migrations/
 
 static/
+
+media/

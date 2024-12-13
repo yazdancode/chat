@@ -1,8 +1,9 @@
+{% load static %}
 <header x-data="{ mobilenavOpen: false }" class="md:flex items-center justify-between [&>*]:px-8 bg-gray-800 h-20 text-white sticky top-0 z-40">
     <div class="flex items-center justify-between h-20">
         <logo>
             <a class="flex items-center gap-1" href="/">
-                <img class="w-7 -mt-1" src="https://img.icons8.com/small/64/ffffff/fire-heart.png"/>
+                <img class="w-6 mr-1 -mt-1" src="{% static 'Post/images/fireheart_white.svg' %}" alt="heart"/>
                 <span class="text-lg font-bold">عکس‌های شگفت‌انگیز</span>
             </a>
         </logo>
@@ -24,7 +25,7 @@
                 <a @click="dropdownOpen = !dropdownOpen" @click.away="dropdownOpen = false" class="cursor-pointer select-none">
                     <img class="h-8 w-8 rounded-full object-cover ml-2" src="https://pbs.twimg.com/profile_images/508601156767997952/fFTdKUf2_400x400.jpeg"/>
                     بارت
-                    <img x-bind:class="dropdownOpen && 'rotate-180 duration-300'" class="w-4 mr-1" src="https://img.icons8.com/small/32/777777/expand-arrow.png"/>
+                    <img x-bind:class="dropdownOpen && 'rotate-180 duration-300'" class="w-4 mr-1" src="https://img.icons8.com/small/32/777777/expand-arrow.png" alt=""/>
                 </a>
                 <div x-show="dropdownOpen" x-cloak class="absolute left-0 bg-white text-black shadow rounded-lg w-40 p-2 z-20"
                 x-transition:enter="duration-300 ease-out"
