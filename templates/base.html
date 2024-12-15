@@ -6,31 +6,56 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>عکس‌های شگفت‌انگیز</title>
     <link rel="shortcut icon" type="image/png" href="https://img.icons8.com/small/64/000000/fire-heart.png"/>
+    <!-- فونت فارسی -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- کتابخانه‌های جاوااسکریپت -->
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <style type="text/tailwindcss">
+        /* تنظیمات سفارشی */
         :root {
             --primary: rgb(88, 40, 244);
             --primary-hover: rgb(69, 29, 200);
             --black: #1f2937;
             --font1: 'Vazirmatn', sans-serif;
         }
+
         body {
             font-family: var(--font1);
             direction: rtl;
+            background-color: rgb(243, 244, 246); /* رنگ پس‌زمینه */
         }
+
         .navitems > li > a {
-            @apply flex items-center gap-2 h-12 px-4 hover:bg-gray-700 rounded-lg flex-row-reverse;
+            @apply flex items-center gap-2 h-12 px-4 hover:bg-gray-700 rounded-lg flex-row-reverse text-white;
+        }
+
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem;
+        }
+
+        nav ul {
+            @apply flex gap-4 list-none;
+        }
+
+        main {
+            @apply p-6;
+        }
+
+        footer {
+            @apply text-center mt-6 py-4 bg-gray-800 text-white;
         }
     </style>
 </head>
-<body class="bg-gray-100">
+<body>
     {% include 'includes/messages.html' %}
     {% include 'includes/header.html' %}
     {% block layout %}
     {% endblock %}
 </body>
 </html>
+

@@ -142,6 +142,8 @@ dmypy.json
 #New applications
 Post/migrations/
 
+User/migrations
+
 static/
 
 media/
