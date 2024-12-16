@@ -1,0 +1,21 @@
+<h1>Edit Post</h1>
+<div class="card p-4">
+    <div class="flex items-center mb-4">
+        <img class="w-20 h-20 object-cover rounded-xl mr-4" src="{{ user.profile.image.url }}">
+        <div class="text-center max-w-md">
+            <h1 id="username">{{ user.profile.username }}</h1>
+            <div class="text-gray-400 mb-2 -mt-3">@{{ user.username }}</div>
+        </div>
+    </div>
+    <div class="pb-2">
+        <form method='POST' enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="pt-4">
+                <button type="submit">Submit</button>
+                <a class="button secondaryAction ml-1" href="{{ request.META.HTTP_REFERER }}">Go Back</a>
+            </div>
+        </form>
+        <a class="mt-12 hover:underline text-gray-500" href="">Delete Profile</a>
+    </div>
+</div>

@@ -17,6 +17,8 @@ INSTALLED_APPS = [
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
+    # installed apps
+    "django_cleanup.apps.CleanupConfig",
     # app development
     "Post.apps.PostConfig",
     "User.apps.UserConfig",

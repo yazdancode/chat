@@ -1,3 +1,25 @@
 from django.db import models
+from django.contrib.auth.models import User
+from django.contrib.auth.hashers import make_password
 
-# Create your models here.
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to="avatars/", blank=True, null=True)
+    username = models.CharField(max_length=20, null=True, blank=True)
+    password = models.CharField(max_length=255, null=True, blank=True)
+    email = models.EmailField(max_length=20, null=True, blank=True, unique=True)
+    location = models.CharField(null=True, max_length=500, blank=True)
+    bio = models.TextField(null=True, blank=True)
+    created_on = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.user.username
+
+    def save(self, *args, **kwargs):
+        if self.password and not self.password.startswith("pbkdf2_"):
+            self.password = make_password(self.password)
+        if self.username:
+            self.username = self.username.strip().lower()
+
+        super().save(*args, **kwargs)
