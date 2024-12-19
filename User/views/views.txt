@@ -1,0 +1,29 @@
+# function to viws for viwes.py
+
+# TODO : function with test written There is no readability in the code at all
+# def profile_view(request, username=None):
+#     if username:
+#         profile = get_object_or_404(User, pk=username).profile
+#     else:
+#          try:
+#               profile = request.user.profile
+#          except:
+#               raster = Http404()
+#
+#
+#     return render(request, "users/profile.html", {"profile": profile})
+
+
+# TODO : function with test written There is no readability in the code at all
+# @login_required
+# def profile_edit_view(request):
+#     profile = request.user.profile
+#     if request.method == "POST":
+#         form = UserForm(request.POST, request.FILES, instance=profile)
+#         if form.is_valid():
+#             form.save()
+#             return redirect(reverse("profile"))
+#     else:
+#         form = UserForm(instance=profile)
+#
+#     return render(request, "users/profile_edit.html", {"form": form})

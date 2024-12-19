@@ -9,6 +9,7 @@ Django==5.1.4
 django-allauth==0.54.0
 django-cleanup==9.0.0
 idna==3.10
+isort==5.13.2
 oauthlib==3.2.2
 pillow==11.0.0
 pycairo==1.27.0

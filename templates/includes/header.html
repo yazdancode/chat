@@ -1,7 +1,7 @@
 {% load static %}
 <header x-data="{ mobilenavOpen: false }" class="md:flex items-center justify-between [&>*]:px-8 bg-gray-800 h-20 text-white sticky top-0 z-40">
     <div class="flex items-center justify-between h-20">
-        <!-- لوگو -->
+        <!-- Logo -->
         <div>
             <a class="flex items-center gap-1" href="/">
                 <img class="w-6 mr-1 -mt-1" src="{% static 'Post/images/fireheart_white.svg' %}" alt="heart"/>
@@ -9,7 +9,7 @@
             </a>
         </div>
 
-        <!-- آیکون موبایل -->
+        <!-- Mobile Icon -->
         <div class="md:hidden">
             <a @click="mobilenavOpen = !mobilenavOpen" class="h-12 w-12 flex items-center justify-center cursor-pointer hover:bg-gray-700 rounded-lg">
                 <img x-show="!mobilenavOpen" class="w-6 h-6 select-none" src="https://img.icons8.com/small/64/ffffff/menu.png" alt="menu"/>
@@ -18,7 +18,7 @@
         </div>
     </div>
 
-    <!-- ناوبری -->
+    <!-- Navigation -->
     <nav x-show="mobilenavOpen" x-cloak
          class="md:!block bg-gray-800 h-screen w-screen md:h-auto md:w-auto -mt-20 md:mt-0 absolute md:relative z-[-1]"
          x-transition:enter="duration-300 ease-out"
@@ -30,8 +30,8 @@
             <li><a href="{% url 'post-create' %}">ایجاد پست</a></li>
             <li x-data="{ dropdownOpen: false }" class="relative">
                 <a @click="dropdownOpen = !dropdownOpen" @click.away="dropdownOpen = false" class="cursor-pointer select-none">
-                    <img class="h-8 w-8 rounded-full object-cover ml-2" src="{{ user.profile.image.url }}" alt="user avatar"/>
-                    {{user.username}}
+                    <img class="h-8 w-8 rounded-full object-cover ml-2" src="{{ user.profile.avatar }}" alt="user avatar"/>
+                    {{user.profile.name}}
                     <img x-bind:class="dropdownOpen && 'rotate-180 duration-300'" class="w-4 mr-1" src="https://img.icons8.com/small/32/777777/expand-arrow.png" alt="dropdown arrow"/>
                 </a>
                 <div x-show="dropdownOpen" x-cloak
@@ -40,7 +40,12 @@
                      x-transition:enter-start="opacity-0 -translate-y-5 scale-90"
                      x-transition:enter-end="opacity-100 translate-y-0 scale-100">
                     <ul class="hoverlist [&>li>a]:justify-end">
-                        <li><a href="{% url 'profile' %}">پروفایل من</a></li>
+                        {% if user.username %}
+                        <!-- Profile link with 'username' passed to the URL pattern -->
+                        <li><a href="{% url 'profile' username=user.username %}">پروفایل من</a></li>
+                        {% else %}
+                            <p>نام کاربری در دسترس نیست</p>
+                        {% endif %}
                         <li><a href="{% url 'profile-edit' %}">ویرایش پروفایل</a></li>
                         <li><a href="{% url 'account_logout' %}">خروج</a></li>
                     </ul>

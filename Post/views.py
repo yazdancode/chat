@@ -14,22 +14,6 @@ from Post.form import PostCreateForm, PostEditForm
 from Post.models import Post, Tag
 
 
-# TODO : function with test written There is no readability in the code at all
-# def home_view(request, **kwargs, tag=None):
-#      if tag:
-#          post = Post.objects.filter(tags__slug=tag)
-#          tag = get_object_or_404(Tag, slug=tag)
-#     else:
-#         posts = Post.objects.all()
-#     categories = Tag.objects.all()
-#
-#     cocontext= {
-#         'posts': posts,
-#         'categories': categories,
-#     }
-#     return render(request, 'posts/home.html', cocontext=cocontext)
-
-
 class HomeView(ListView):
     model = Post
     template_name = "posts/home.html"
@@ -49,48 +33,6 @@ class HomeView(ListView):
         if hasattr(self, "tag"):
             context["selected_tag"] = self.tag
         return context
-
-
-# TODO: function with test written There is a readability in the code at all
-# # def category_view(request, tag):
-# #     posts = Post.objects.filter(tags__slug=tag)
-# #     return render(request, "posts/home.html", {"posts": posts})
-#
-#
-# class CategoryView(ListView):
-#     model = Post
-#     template_name = "posts/home.html"
-#     context_object_name = "posts"
-#
-#     def get_queryset(self):
-#         tag = self.kwargs.get("tag")
-#         return Post.objects.filter(tags__slug=tag)
-
-
-# TODO: function with test written There is a readability in the code at all
-# def post_create_view(request, **kwargs):
-#     form = PostCreateForm()
-#     if request.method == "POST":
-#         form = PostCreateForm(request.POST)
-#         if form.is_valid():
-#             post = form.save(commit=False)
-#             website = request.get(form.data["url"])
-#             sourcecode = BeautifulSoup(website.text, "html.parser")
-#             find_image = sourcecode.select(
-#                 'meta[content^="https://live.staticflickr.com/"]'
-#             )
-#             image = find_image[0]["content"]
-#             post.image = image
-#             find_title = sourcecode.select("h1.photo-title")
-#             title = find_title[0].text.strip()
-#             post.title = title
-#             find_artist = sourcecode.select("a.owner-name")
-#             artist = find_artist[0].text.strip()
-#             post.artist = artist
-#             post.save()
-#             from .save_m2m()
-#             return redirect("home")
-#     return render(request, "posts/post_create_view.html", {"form": form})
 
 
 class PostCreateView(View):
@@ -142,17 +84,6 @@ class PostCreateView(View):
         }
 
 
-# TODO: function with test written There is a readability in the code at all
-# def post_delete_view(request, pk):
-# post = get_object_or_404(Post, id=pk)
-#
-#     if request.method == "POST":
-#         post.delete()
-#         messages.success(request, "پست با موفقیت حذف شد")
-#         return redirect("home")
-#     return render(request, "posts/post_delete.html", {"post": post})
-
-
 class PostDeleteView(SuccessMessageMixin, DeleteView):
     model = Post
     template_name = "posts/post_delete.html"
@@ -164,23 +95,6 @@ class PostDeleteView(SuccessMessageMixin, DeleteView):
         return super().delete(request, *args, **kwargs)
 
 
-# TODO: function with test written There is a readability in the code at all
-# def post_edit_view(request, pk):
-#     post = get_object_or_404(Post, id=pk)
-#     form = PostEditForm(instance=post)
-#     context = {
-#         'post': post,
-#         'form': form
-#     }
-#     if request.method == 'POST':
-#         form = PostEditForm(request.POST, instance=post)
-#         if form.is_valid():
-#             form.save()
-#             messages.success(request, 'Post updated')
-#             return redirect('home')
-#     return render(request, 'posts/post_edit.html', context=context)
-
-
 class PostEditView(UpdateView):
     model = Post
     form_class = PostEditForm
@@ -190,12 +104,6 @@ class PostEditView(UpdateView):
     def form_valid(self, form):
         messages.success(self.request, "Post updated successfully!")
         return super().form_valid(form)
-
-
-# TODO: function with test written There is a readability in the code at all
-# def post_page_view(request, pk):
-#     post = get_object_or_404(Post, id=pk)
-#     return render(request, "posts/post_page.html", {"post": post})
 
 
 class PostDetailView(DetailView):
