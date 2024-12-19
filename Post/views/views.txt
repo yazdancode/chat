@@ -1,3 +1,4 @@
+# function to viws for viwes.py
 
 # TODO : function with test written There is no readability in the code at all
 # def home_view(request, **kwargs, tag=None):

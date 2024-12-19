@@ -40,15 +40,11 @@
                      x-transition:enter-start="opacity-0 -translate-y-5 scale-90"
                      x-transition:enter-end="opacity-100 translate-y-0 scale-100">
                     <ul class="hoverlist [&>li>a]:justify-end">
-                        {% if user.username %}
-                        <!-- Profile link with 'username' passed to the URL pattern -->
-                        <li><a href="{% url 'profile' username=user.username %}">پروفایل من</a></li>
-                        {% else %}
-                            <p>نام کاربری در دسترس نیست</p>
-                        {% endif %}
+                        <li><a href="{% url 'profile' username=user.profile.username %}">پروفایل من</a></li>
                         <li><a href="{% url 'profile-edit' %}">ویرایش پروفایل</a></li>
                         <li><a href="{% url 'account_logout' %}">خروج</a></li>
                     </ul>
+
                 </div>
             </li>
             {% else %}

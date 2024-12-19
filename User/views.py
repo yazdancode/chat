@@ -1,10 +1,10 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import DetailView, UpdateView
+from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
-from django.http import Http404
-from .forms import UserForm
+from django.views.generic import DetailView, UpdateView, TemplateView
 from User.models import Profile
+from .forms import UserForm
 
 
 class ProfileView(DetailView):
@@ -29,8 +29,13 @@ class ProfileEditView(LoginRequiredMixin, UpdateView):
     template_name = "users/profile_edit.html"
 
     def get_object(self, queryset=None):
-        profile, created = Profile.objects.get_or_create(user=self.request.user)
-        return profile
+        # اطمینان حاصل می‌کند که پروفایل مربوط به کاربر جاری بارگذاری می‌شود
+        return get_object_or_404(Profile, user=self.request.user)
 
     def get_success_url(self):
-        return reverse("profile")
+        # پس از ذخیره فرم، کاربر به صفحه پروفایل منتقل می‌شود
+        return reverse("profile", kwargs={"username": self.request.user.username})
+
+
+class ProfileDeleteView(TemplateView):
+    template_name = "users/profile_delete.html"

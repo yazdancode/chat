@@ -27,3 +27,7 @@
 #         form = UserForm(instance=profile)
 #
 #     return render(request, "users/profile_edit.html", {"form": form})
+
+# TODO : function with test written There is no readability in the code at all
+# def profile_delete_view(request):
+      return render(request, 'users/profile_delete.html')

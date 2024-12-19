@@ -1,0 +1,13 @@
+{% extends 'layouts/c.html' %}
+{% block content %}
+    <h1>حذف اکانت</h1>
+    <p>آیا مطمئن هستید که می خواهید حساب خود را حذف کنید؟</p>
+
+    <form method='POST'>
+        {% csrf_token %}
+        <button type="submit" class="btn-red mt-6">بله، من می خواهم اکانت خود را حذف کنم</button>
+        <a class="button secondaryAction ml-1" href="{{ request.META.HTTP_REFERER }}">لغو کنید</a>
+    </form>
+{% endblock %}
+
+

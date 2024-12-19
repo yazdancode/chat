@@ -142,8 +142,12 @@ dmypy.json
 #New applications
 Post/migrations/
 
-User/migrations
+User/migrations/
 
 static/
 
 media/
+
+#Post/views/
+#
+#User/views/
