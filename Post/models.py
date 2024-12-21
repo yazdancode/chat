@@ -15,7 +15,13 @@ class Post(models.Model):
     body = models.TextField()
     tags = models.ManyToManyField("Tag")
     created = models.DateTimeField(auto_now_add=True)
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.UUIDField(
+        max_length=100,
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False,
+        unique=True,
+    )
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):

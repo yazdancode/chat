@@ -3,13 +3,13 @@ from bs4 import BeautifulSoup
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import DeleteView, UpdateView
-from django.shortcuts import get_object_or_404
+
 from Post.form import PostCreateForm, PostEditForm
 from Post.models import Post, Tag
 
