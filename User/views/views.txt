@@ -1,15 +1,11 @@
 # function to viws for viwes.py
 
-# TODO : function with test written There is no readability in the code at all
+TODO : function with test written There is no readability in the code at all
 # def profile_view(request, username=None):
 #     if username:
-#         profile = get_object_or_404(User, pk=username).profile
+#         profile = get_object_or_404(User, username=username)
 #     else:
-#          try:
-#               profile = request.user.profile
-#          except:
-#               raster = Http404()
-#
+#         profile = request.user.profile
 #
 #     return render(request, "users/profile.html", {"profile": profile})
 

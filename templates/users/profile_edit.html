@@ -16,6 +16,6 @@
                 <a class="button secondaryAction ml-1" href="{{ request.META.HTTP_REFERER }}">Go Back</a>
             </div>
         </form>
-        <a class="mt-12 hover:underline text-gray-500" href="{% url 'profile-delete' %}">Delete Profile</a>
+        <a class="mt-12 hover:underline text-gray-500" href="{% url 'profile-delete' username=user.username %}">Delete Profile</a>
     </div>
 </div>

@@ -40,11 +40,10 @@
                      x-transition:enter-start="opacity-0 -translate-y-5 scale-90"
                      x-transition:enter-end="opacity-100 translate-y-0 scale-100">
                     <ul class="hoverlist [&>li>a]:justify-end">
-                        <li><a href="{% url 'profile' username=user.profile.username %}">پروفایل من</a></li>
-                        <li><a href="{% url 'profile-edit' %}">ویرایش پروفایل</a></li>
-                        <li><a href="{% url 'account_logout' %}">خروج</a></li>
+                            <li><a href="{% url 'profile' username=user.username %}">پروفایل من</a></li>
+                            <li><a href="{% url 'profile-edit' username=user.username %}">ویرایش پروفایل</a></li>
+                            <li><a href="{% url 'account_logout' %}">خروج</a></li>
                     </ul>
-
                 </div>
             </li>
             {% else %}

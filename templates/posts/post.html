@@ -10,7 +10,7 @@
     </figure>
     <div class="p-4 pb-2">
         {% if post.author %}
-        <a href="{% if post.author.username %}{% url 'profile' username=post.author.username %}{% else %}#{% endif %}">
+        <a class="flex items-center gap-1 mb-4" href="{% url 'profile' post.author.username %}">
             <img class="w-8 h-8 object-cover rounded-full" src="{{ post.author.profile.avatar }}" alt="User Image">
             <span class="font-bold hover:underline">{{ post.author.profile.name }}</span>
             <span class="text-sm text-gray-400">@{{ post.author.username }}</span>
@@ -18,7 +18,7 @@
         {% else %}
         <div class="flex items-center gap-1 mb-4">
             <img class="w-8 h-8 object-cover rounded-full" src="{% static 'Post/images/avatar_default.svg' %}" alt="#">
-            <span class="font-bold hover:underline">no author</span>
+            <span class="font-bold hover:underline">بدون نویسنده</span>
         </div>
         {% endif %}
         <p class="text-5xl mb-10 px-4 font1">{{ post.body }}</p>

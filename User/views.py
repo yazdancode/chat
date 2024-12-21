@@ -1,12 +1,13 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import Http404
-from django.shortcuts import get_object_or_404
+from django.contrib.auth.models import User
+from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
-from django.views.generic import DetailView, TemplateView, UpdateView
+from django.urls import reverse_lazy
+from django.views.generic import DetailView, DeleteView, UpdateView
 
 from User.models import Profile
 
-from .forms import UserForm
+from User.forms import UserForm
 
 
 class ProfileView(DetailView):
@@ -18,11 +19,10 @@ class ProfileView(DetailView):
         username = self.kwargs.get("username")
 
         if username:
-            return get_object_or_404(Profile, user__username=username)
-        elif self.request.user.is_authenticated:
-            return self.request.user.profile
+            user = get_object_or_404(User, username=username)
+            return user.profile
         else:
-            raise Http404("User not found")
+            return self.request.user.profile
 
 
 class ProfileEditView(LoginRequiredMixin, UpdateView):
@@ -34,8 +34,16 @@ class ProfileEditView(LoginRequiredMixin, UpdateView):
         return get_object_or_404(Profile, user=self.request.user)
 
     def get_success_url(self):
-        return reverse("profile", kwargs={"username": self.request.user.username})
+        return reverse("profile-edit", kwargs={"username": self.request.user.username})
 
 
-class ProfileDeleteView(TemplateView):
+class ProfileDeleteView(DeleteView):
+    model = User
     template_name = "users/profile_delete.html"
+    context_object_name = "profile"
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(User, username=self.kwargs["username"])
+
+    def get_success_url(self):
+        return reverse_lazy("home")
