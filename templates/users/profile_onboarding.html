@@ -1,8 +1,7 @@
 {% extends 'layouts/c.html' %}
 
 {% block content %}
-
-<h1>Edit Post</h1>
+<h1>Complete your Profile</h1>
 <div class="card p-4">
     <div class="flex items-center mb-4">
         <img class="w-20 h-20 object-cover rounded-xl mr-4" src="{{ user.profile.image }}">
@@ -17,10 +16,9 @@
             {{ form.as_p }}
             <div class="pt-4">
                 <button type="submit">Submit</button>
-                <a class="button secondaryAction ml-1" href="{{ request.META.HTTP_REFERER }}">Go Back</a>
+                <a class="button secondaryAction ml-1" href="{{ request.META.HTTP_REFERER }}">Skip</a>
             </div>
         </form>
-        <a class="mt-12 hover:underline text-gray-500" href="{% url 'profile_delete' username=user.username %}">Delete Profile</a>
     </div>
 </div>
 {% endblock %}

@@ -32,6 +32,7 @@
 
 
 # TODO: function with test written There is a readability in the code at all
+# @login_required
 # def post_create_view(request, **kwargs):
 #     form = PostCreateForm()
 #     if request.method == "POST":
@@ -58,8 +59,9 @@
 
 
 # TODO: function with test written There is a readability in the code at all
+# @login_required
 # def post_delete_view(request, pk):
-# post = get_object_or_404(Post, id=pk)
+# post = get_object_or_404(Post, id=pk,  author=request.user)
 #
 #     if request.method == "POST":
 #         post.delete()
@@ -68,8 +70,9 @@
 #     return render(request, "posts/post_delete.html", {"post": post})
 
 # TODO: function with test written There is a readability in the code at all
+# @login_required
 # def post_edit_view(request, pk):
-#     post = get_object_or_404(Post, id=pk)
+#     post = get_object_or_404(Post, id=pk, author=request.user)
 #     form = PostEditForm(instance=post)
 #     context = {
 #         'post': post,

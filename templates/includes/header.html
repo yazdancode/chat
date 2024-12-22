@@ -27,7 +27,7 @@
         <ul class="flex items-center navitems flex-col md:flex-row gap-8 md:gap-0 justify-center h-full -translate-y-10 md:translate-y-0">
             {% if user.is_authenticated %}
             <li><a href="/">خانه</a></li>
-            <li><a href="{% url 'post-create' %}">ایجاد پست</a></li>
+            <li><a href="{% url 'post_create' %}">ایجاد پست</a></li>
             <li x-data="{ dropdownOpen: false }" class="relative">
                 <a @click="dropdownOpen = !dropdownOpen" @click.away="dropdownOpen = false" class="cursor-pointer select-none">
                     <img class="h-8 w-8 rounded-full object-cover ml-2" src="{{ user.profile.image }}" alt="user avatar"/>

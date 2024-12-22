@@ -19,11 +19,23 @@ TODO : function with test written There is no readability in the code at all
 #         if form.is_valid():
 #             form.save()
 #             return redirect(reverse("profile"))
+#         if request.path == reverse("profile_onboarding"):
+#              template = "users/profile_onboarding.html"
+#         else:
+#             template = "users/profile_edit.html"
 #     else:
 #         form = UserForm(instance=profile)
 #
-#     return render(request, "users/profile_edit.html", {"form": form})
+#     return render(request, template, {"form": form})
 
 # TODO : function with test written There is no readability in the code at all
+# @login_required
 # def profile_delete_view(request):
+      user = request.user
+      if request.method == "POST":
+          logout(request)
+          user.delete()
+          messages.success(request, "Account deleted successfully")
+          return redirect(reverse("home"))
+
       return render(request, 'users/profile_delete.html')
