@@ -10,7 +10,7 @@ from django.views.generic import CreateView, ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import DeleteView, UpdateView
 
-from Post.form import PostCreateForm, PostEditForm
+from Post.form import PostCreateForm, PostEditForm, CommentCreateForm
 from Post.models import Post, Tag
 
 
@@ -109,7 +109,12 @@ class PostEditView(LoginRequiredMixin, UpdateView):
         return reverse_lazy("home")
 
 
-class PostDetailView(DetailView):
+class PostPageView(DetailView):
     model = Post
     template_name = "posts/post_page.html"
     context_object_name = "post"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["commentform"] = CommentCreateForm()
+        return context

@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import ModelForm
 
-from Post.models import Post
+from Post.models import Post, Comment
 
 
 class PostCreateForm(ModelForm):
@@ -96,4 +96,28 @@ class PostEditForm(ModelForm):
                 }
             ),
             "tags": forms.CheckboxSelectMultiple(),
+        }
+
+
+class CommentCreateForm(ModelForm):
+    class Meta:
+        model = Comment
+        fields = [
+            "body",
+        ]
+        labels = {
+            "body": "",
+        }
+        widgets = {
+            "body": forms.Textarea(
+                attrs={
+                    "rows": 3,
+                    "class": "font1 text-4xl",
+                }
+            ),
+        }
+        error_messages = {
+            "body": {
+                "required": "لطفاً متن را وارد کنید.",
+            },
         }

@@ -89,4 +89,8 @@
 # TODO: function with test written There is a readability in the code at all
 # def post_page_view(request, pk):
 #     post = get_object_or_404(Post, id=pk)
-#     return render(request, "posts/post_page.html", {"post": post})
+#     commentform = CommnetCreateForm()
+#     context = {t
+#         'post': post,
+#         'commentform': commentform
+#     return render(request, "posts/post_page.html", context=context)

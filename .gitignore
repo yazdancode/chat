@@ -148,6 +148,4 @@ static/
 
 media/
 
-#Post/views/
-#
-#User/views/
+.ideavimrc
