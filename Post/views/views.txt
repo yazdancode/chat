@@ -3,17 +3,11 @@
 # TODO : function with test written There is no readability in the code at all
 # def home_view(request, **kwargs, tag=None):
 #      if tag:
-#          post = Post.objects.filter(tags__slug=tag)
-#          tag = get_object_or_404(Tag, slug=tag)
-#     else:
-#         posts = Post.objects.all()
-#     categories = Tag.objects.all()
-#
-#     cocontext= {
-#         'posts': posts,
-#         'categories': categories,
-#     }
-#     return render(request, 'posts/home.html', cocontext=cocontext)
+#           posts = Post.objects.filter(tags__slug=tag)
+            tag = get_object_or_404(Tag, slug=tag)
+        else:
+            posts = Post.objects.all()
+
 
 # TODO: function with test written There is a readability in the code at all
 # # def category_view(request, tag):
@@ -94,3 +88,28 @@
 #         'post': post,
 #         'commentform': commentform
 #     return render(request, "posts/post_page.html", context=context)
+
+
+# TODO: function with test written There is a readability in the code at all
+# @login_required
+# def comment_sent(request, pk)->None:
+#     post = get_object_or_404(Post, id=pk)
+#     if request.method == "POST":
+#         form = CommnetCreateForm(request.POST)
+#         if form.is_valid():
+#             comment = form.save(commit=False)
+#             comment.author = request.user
+#             commnet.parent_post = post
+#             comment.save()
+#         return redirect("post_page", pk=pk)
+
+
+#TODO: function with test written There is a readability in the code at all
+# @login_required
+# def comment_delete_view(request, pk):
+#     comment = get_object_or_404(Comment, id=pk, author=request.user)
+#     if request.method == "POST":
+#         comment.delete()
+#         messages.success(request, "نظر با موفقیت حذف شد")
+#         return redirect("post" , pk=comment.parent_post.id)
+#     return render(request, "posts/comment_delete.html", {"comment": comment})

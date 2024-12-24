@@ -10,7 +10,7 @@ from django.views.generic import CreateView, ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import DeleteView, UpdateView
 
-from Post.form import PostCreateForm, PostEditForm, CommentCreateForm
+from Post.form import CommentCreateForm, PostCreateForm, PostEditForm
 from Post.models import Post, Tag
 
 
@@ -118,3 +118,11 @@ class PostPageView(DetailView):
         context = super().get_context_data(**kwargs)
         context["commentform"] = CommentCreateForm()
         return context
+
+
+class CommentSentViwe:
+    pass
+
+
+class CommentDeleteView:
+    pass

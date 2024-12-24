@@ -3,8 +3,8 @@ from django.urls import path
 from .views import (
     ProfileDeleteView,
     ProfileEditView,
-    ProfileView,
     ProfileOnboardingView,
+    ProfileView,
 )
 
 urlpatterns = [

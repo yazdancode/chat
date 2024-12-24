@@ -29,8 +29,14 @@
         </div>
         <div class="flex items-center justify-between text-sm px-2">
             <a class="font-bold hover:underline" href="{% url 'post-detail' post.id %}">
+                {% if post.comments.count %}
                 نظرات
-                <span class="font-light text-gray-500 mr-1">۳</span>
+                <span class="font-light text-gray-500 mr-1">{{ post.comments.count }}</span>
+                {% else %}
+                    {% if user.is_authenticated %}
+                    اضافه کردن نظر
+                    {% endif %}
+                {% endif %}
             </a>
             <div class="flex items-center gap-4">
                 <div class="flex items-center gap-1">

@@ -1,12 +1,13 @@
+from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import DeleteView, DetailView, UpdateView
+
 from User.forms import UserForm
 from User.models import Profile
-from django.contrib import messages
 
 
 class ProfileView(DetailView):
