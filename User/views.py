@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import DeleteView, DetailView, UpdateView
@@ -15,7 +16,7 @@ class ProfileView(DetailView):
     template_name = "users/profile.html"
     context_object_name = "profile"
 
-    def get_object(self, queryset=None):
+    def get_object(self, queryset=None)-> Profile:
         username = self.kwargs.get("username")
 
         if username:
@@ -32,10 +33,10 @@ class ProfileEditView(UpdateView):
     form_class = UserForm
     template_name = "users/profile_edit.html"
 
-    def get_object(self, queryset=None):
+    def get_object(self, queryset=None)-> Profile:
         return get_object_or_404(Profile, user=self.request.user)
 
-    def get_success_url(self):
+    def get_success_url(self)-> str:
         return reverse("profile-edit", kwargs={"username": self.request.user.username})
 
 
@@ -45,17 +46,17 @@ class ProfileOnboardingView(LoginRequiredMixin, UpdateView):
     template_name = "users/profile_onboarding.html"
     context_object_name = "profile"
 
-    def get_object(self):
+    def get_object(self, **kwargs) -> Profile:
         return self.request.user.profile
 
-    def get_success_url(self):
+    def get_success_url(self)-> str:
         return reverse_lazy("profile")
 
-    def form_valid(self, form):
+    def form_valid(self, form)-> HttpResponse:
         response = super().form_valid(form)
         return response
 
-    def form_invalid(self, form):
+    def form_invalid(self, form)-> HttpResponse:
         return self.render_to_response(self.get_context_data(form=form))
 
 
@@ -64,7 +65,7 @@ class ProfileDeleteView(LoginRequiredMixin, DeleteView):
     template_name = "users/profile_delete.html"
     success_url = reverse_lazy("home")
 
-    def get_object(self, queryset=None):
+    def get_object(self, queryset=None)-> HttpResponseRedirect | User:
         username = self.kwargs.get("username")
         user = get_object_or_404(User, username=username)
         if user != self.request.user:
@@ -72,7 +73,7 @@ class ProfileDeleteView(LoginRequiredMixin, DeleteView):
             return redirect("home")
         return user
 
-    def form_valid(self, form):
+    def form_valid(self, form)-> HttpResponse:
         messages.success(self.request, "Account deleted successfully")
         logout(self.request)
         return super().form_valid(form)

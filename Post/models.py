@@ -23,7 +23,7 @@ class Post(models.Model):
         unique=True,
     )
 
-    def __str__(self):
+    def __str__(self)-> str:
         return self.title
 
     class Meta:
@@ -36,7 +36,7 @@ class Tag(models.Model):
     slug = models.SlugField(max_length=20, unique=True)
     order = models.IntegerField(null=True)
 
-    def __str__(self):
+    def __str__(self)-> str:
         return self.name
 
     class Meta:
@@ -64,3 +64,21 @@ class Comment(models.Model):
 
     class Meta:
         ordering = ["-created"]
+
+
+class Reply(models.Model):
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="replies")
+    parent_comment = models.ForeignKey(Comment, on_delete=models.CASCADE, related_name="replies")
+    body = models.CharField(max_length=150)
+    created = models.DateTimeField(auto_now_add=True)
+    id = models.CharField(max_length=100, default=uuid.uuid4, primary_key=True, editable=False)
+
+    def __str__(self)-> str:
+        try :
+            return f"{self.author.username} : {self.body[:30]}"
+        except:
+            return f"no author : {self.body}"
+
+    class Meta:
+        ordering = ["-created"]
+

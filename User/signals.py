@@ -6,7 +6,7 @@ from .models import Profile
 
 
 @receiver(post_save, sender=User, dispatch_uid="create_profile_signal")
-def manage_profile(instance, created, **kwargs):
+def manage_profile(instance, created, **kwargs)-> None:
     user = instance
     if created:
         Profile.objects.create(user=user, email=user.email)
@@ -20,7 +20,7 @@ def manage_profile(instance, created, **kwargs):
 
 
 @receiver(post_save, sender=Profile, dispatch_uid="update_profile_signal")
-def update_profile(instance, created, **kwargs):
+def update_profile(instance, created, **kwargs)-> None:
     if not created:
         try:
             user = instance.user
