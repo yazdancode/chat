@@ -14,10 +14,10 @@ class Profile(models.Model):
     bio = models.TextField(null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self)-> str:
+    def __str__(self) -> str:
         return self.user.username
 
-    def save(self, *args, **kwargs)-> None:
+    def save(self, *args, **kwargs) -> None:
         if self.password and not self.password.startswith("pbkdf2_"):
             self.password = make_password(self.password)
         elif self.username:
@@ -25,7 +25,7 @@ class Profile(models.Model):
         super().save(*args, **kwargs)
 
     @property
-    def avatar(self)-> str:
+    def avatar(self) -> str:
         try:
             avatar = self.image.url
         except AttributeError:
@@ -33,7 +33,7 @@ class Profile(models.Model):
         return avatar
 
     @property
-    def name(self)-> str:
+    def name(self) -> str:
         if self.username:
             name = self.username
         else:

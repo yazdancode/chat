@@ -1,41 +1,75 @@
 # function to viws for viwes.py
-
+[*]
 TODO : function with test written There is no readability in the code at all
-# def profile_view(request, username=None):
-#     if username:
-#         profile = get_object_or_404(User, username=username)
-#     else:
-#         profile = request.user.profile
-#
-#     return render(request, "users/profile.html", {"profile": profile})
+def profile_view(request, username=None):
+    if username:
+        profile = get_object_or_404(User, username=username).profile
+    else:
+        try:
+            profile = request.user.profile
+        except:
+            raise Http404()
 
+    posts = profile.user.posts.all()
+
+    if request.htmx:
+        if 'top-posts' in request.GET:
+            posts = profile.user.posts.annotate(num_likes=Count('likes')).filter(num_likes__gt=0).order_by('-num_likes')
+        elif 'top-comments' in request.GET:
+            comments = profile.user.comments.annotate(num_likes=Count('likes')).filter(num_likes__gt=0).order_by('-num_likes')
+            replyform = ReplyCreateForm()
+            return render(request, 'snippets/loop_profile_comments.html', { 'comments': comments, 'replyform': replyform })
+        elif 'liked-posts' in request.GET:
+            posts = profile.user.likedposts.order_by('-likedpost__created')
+        return render(request, 'snippets/loop_profile_posts.html', { 'posts': posts })
+
+    new_message_form = InboxNewMessageForm()
+
+    context = {
+        'profile' : profile,
+        'posts': posts,
+        'new_message_form' : new_message_form
+    }
+
+    return render(request, 'a_users/profile.html', context)
 
 # TODO : function with test written There is no readability in the code at all
-# @login_required
-# def profile_edit_view(request):
-#     profile = request.user.profile
-#     if request.method == "POST":
-#         form = UserForm(request.POST, request.FILES, instance=profile)
-#         if form.is_valid():
-#             form.save()
-#             return redirect(reverse("profile"))
-#         if request.path == reverse("profile_onboarding"):
-#              template = "users/profile_onboarding.html"
-#         else:
-#             template = "users/profile_edit.html"
-#     else:
-#         form = UserForm(instance=profile)
-#
-#     return render(request, template, {"form": form})
+[*]
+@login_required
+def profile_edit_view(request):
+    form = ProfileForm(instance=request.user.profile)
+
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES, instance=request.user.profile)
+        if form.is_valid():
+            form.save()
+
+            if request.user.emailaddress_set.get(primary=True).verified:
+                return redirect('profile')
+            else:
+                return redirect('profile-verify-email')
+
+    if request.path == reverse('profile-onboarding'):
+        template = 'a_users/profile_onboarding.html'
+    else:
+        template = 'a_users/profile_edit.html'
+
+    return render(request, template, {'form':form})
 
 # TODO : function with test written There is no readability in the code at all
-# @login_required
-# def profile_delete_view(request):
-      user = request.user
-      if request.method == "POST":
-          logout(request)
-          user.delete()
-          messages.success(request, "Account deleted successfully")
-          return redirect(reverse("home"))
+@login_required
+def profile_delete_view(request):
+    user = request.user
 
-      return render(request, 'users/profile_delete.html')
+    if request.method == 'POST':
+        logout(request)
+        user.delete()
+        messages.success(request, 'Account deleted, what a pity')
+        return redirect('home')
+
+    return render(request, 'a_users/profile_delete.html' )
+
+# TODO : function with test written There is no readability in the code at all
+def profile_verify_email(request):
+    send_email_confirmation(request, request.user)
+    return redirect('profile')

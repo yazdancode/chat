@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import ModelForm
 
-from Post.models import Comment, Post
+from Post.models import Comment, Post, Reply
 
 
 class PostCreateForm(ModelForm):
@@ -102,6 +102,30 @@ class PostEditForm(ModelForm):
 class CommentCreateForm(ModelForm):
     class Meta:
         model = Comment
+        fields = [
+            "body",
+        ]
+        labels = {
+            "body": "",
+        }
+        widgets = {
+            "body": forms.Textarea(
+                attrs={
+                    "rows": 3,
+                    "class": "font1 text-4xl",
+                }
+            ),
+        }
+        error_messages = {
+            "body": {
+                "required": "لطفاً متن را وارد کنید.",
+            },
+        }
+
+
+class ReplyCreateForm(ModelForm):
+    class Meta:
+        model = Reply
         fields = [
             "body",
         ]

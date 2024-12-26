@@ -1,25 +1,20 @@
 from django.urls import path
 
-from .views import (
-    ProfileDeleteView,
-    ProfileEditView,
-    ProfileOnboardingView,
+from User.views import (
     ProfileView,
+    ProfileEditView,
+    ProfileDeleteView,
+    ProfileVerifyEmailView,
 )
 
 urlpatterns = [
     path("profile/<str:username>/", ProfileView.as_view(), name="profile"),
+    path("profile/", ProfileView.as_view(), name="my_profile"),
+    path("profile/edit/", ProfileEditView.as_view(), name="profile_edit"),
+    path("profile/delete/", ProfileDeleteView.as_view(), name="profile_delete"),
     path(
-        "profile/edit/<str:username>/", ProfileEditView.as_view(), name="profile-edit"
-    ),
-    path(
-        "profile/delete/<str:username>/",
-        ProfileDeleteView.as_view(),
-        name="profile_delete",
-    ),
-    path(
-        "profile/onboarding/",
-        ProfileOnboardingView.as_view(),
-        name="profile_onboarding",
+        "profile/verify-email/",
+        ProfileVerifyEmailView.as_view(),
+        name="profile_verify_email",
     ),
 ]
