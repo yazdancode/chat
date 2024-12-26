@@ -45,7 +45,7 @@
         <div x-show="repliesOpen" x-cloak class="basis-full mt-3 pl-8 grid grid-cols-1">
 
             {% for reply in comment.replies.all %}
-            {% include 'a_posts/reply.html' %}
+            {% include 'posts/reply.html' %}
             {% endfor %}
 
             {% if user.is_authenticated %}

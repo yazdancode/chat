@@ -1,5 +1,4 @@
 import uuid
-
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -14,12 +13,11 @@ class Post(models.Model):
     url = models.URLField(max_length=500, null=True, blank=True)
     body = models.TextField()
     likes = models.ManyToManyField(
-        User, related_name="liked_posts", blank=True, through="Like"
+        User, related_name="liked_posts", blank=True, through="LikePost"
     )
-    tags = models.ManyToManyField("Tag")
+    tags = models.ManyToManyField("Tag", related_name="tagged_posts")
     created = models.DateTimeField(auto_now_add=True)
     id = models.UUIDField(
-        max_length=100,
         primary_key=True,
         default=uuid.uuid4,
         editable=False,
@@ -33,10 +31,24 @@ class Post(models.Model):
         ordering = ["-created"]
 
 
-# TODO: makemigrations and migrate
-class Like(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+class LikePost(models.Model):
+    comment = models.ForeignKey(
+        "Comment", on_delete=models.CASCADE, related_name="like_posts"
+    )
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_likes")
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self) -> str:
+        return f"{self.user.username} liked {self.comment.body[:30]}"
+
+
+class LikedComment(models.Model):
+    post = models.ForeignKey(
+        Post, on_delete=models.CASCADE, related_name="liked_comments"
+    )
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="comment_likes"
+    )
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
@@ -46,7 +58,7 @@ class Like(models.Model):
 class Tag(models.Model):
     name = models.CharField(max_length=50)
     image = models.FileField(upload_to="icons/", null=True, blank=True)
-    slug = models.SlugField(max_length=20, unique=True)
+    slug = models.SlugField(max_length=50, unique=True)
     order = models.IntegerField(null=True)
 
     def __str__(self) -> str:
@@ -64,20 +76,21 @@ class Comment(models.Model):
         Post, on_delete=models.CASCADE, related_name="comments"
     )
     body = models.CharField(max_length=150)
+    likes = models.ManyToManyField(
+        User, related_name="liked_comments", through="LikedComment"
+    )
     created = models.DateTimeField(auto_now_add=True)
-    id = models.CharField(
-        max_length=100,
-        default=uuid.uuid4,
+    id = models.UUIDField(
         primary_key=True,
+        default=uuid.uuid4,
         editable=False,
         unique=True,
     )
 
     def __str__(self) -> str:
-        try:
-            return f"{self.author.username} : {self.body[:30]}"
-        except ImportError:
-            return f"no author : {self.body}"
+        return (
+            f"{self.author.username if self.author else 'no author'} : {self.body[:30]}"
+        )
 
     class Meta:
         ordering = ["-created"]
@@ -88,23 +101,21 @@ class Reply(models.Model):
         User, on_delete=models.SET_NULL, null=True, related_name="replies"
     )
     parent_comment = models.ForeignKey(
-        Comment, on_delete=models.CASCADE, related_name="replies"
+        "Comment", on_delete=models.CASCADE, related_name="replies"
     )
     body = models.CharField(max_length=150)
     created = models.DateTimeField(auto_now_add=True)
-    id = models.CharField(
-        max_length=100,
-        default=uuid.uuid4,
+    id = models.UUIDField(
         primary_key=True,
+        default=uuid.uuid4,
         editable=False,
         unique=True,
     )
 
     def __str__(self) -> str:
-        try:
-            return f"{self.author.username} : {self.body[:30]}"
-        except ImportError:
-            return f"no author : {self.body}"
+        return (
+            f"{self.author.username if self.author else 'no author'} : {self.body[:30]}"
+        )
 
     class Meta:
         ordering = ["-created"]

@@ -3,14 +3,13 @@ from bs4 import BeautifulSoup
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Count
-from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, ListView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
-
 from Post.form import CommentCreateForm, PostCreateForm, PostEditForm, ReplyCreateForm
-from Post.models import Comment, Like, Post, Reply, Tag
+from Post.models import Comment, LikePost, Post, Reply, Tag
+from django.views import View
 
 
 class HomeView(ListView):
@@ -227,15 +226,40 @@ class ReplyDeleteView(LoginRequiredMixin, DeleteView):
         return super().form_valid(form)
 
 
-def like_post(request, pk) -> None:
-    post = get_object_or_404(Post, id=pk)
-    like_exists = Like.objects.filter(
-        username=request.user.username, post=post
-    ).exists()
+# def like_post(request, pk):
+#     post = get_object_or_404(Post, id=pk)
+#     like_exists = LikePost.objects.filter(
+#         username=request.user.username, post=post
+#     ).exists()
+#
+#     if post.author != request.user:
+#         if like_exists:
+#             LikePost.objects.filter(user=request.user, post=post).delete()
+#         else:
+#             LikePost.objects.create(user=request.user, post=post)
+#     return render(request, "snippets/likes.html", {"post": post})
 
-    if post.author != request.user:
-        if like_exists:
-            Like.objects.filter(user=request.user, post=post).delete()
-        else:
-            Like.objects.create(user=request.user, post=post)
-    return render(request, "snippets/like.html", {"post": post})
+
+class LikePostView(View):
+
+    @staticmethod
+    def post(request, pk):
+        post = get_object_or_404(Post, id=pk)
+        like_exists = LikePost.objects.filter(
+            username=request.user.username, post=post
+        ).exists()
+        if post.author != request.user:
+            if like_exists:
+                LikePost.objects.filter(user=request.user, post=post).delete()
+            else:
+                LikePost.objects.create(user=request.user, post=post)
+        return render(request, "snippets/likes_post.html", {"post": post})
+
+    @staticmethod
+    def get(request, pk):
+        post = get_object_or_404(Post, id=pk)
+        return render(request, "snippets/likes_post.html", {"post": post})
+
+
+def like_comment(request, pk):
+    pass
