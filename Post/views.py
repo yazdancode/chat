@@ -10,6 +10,29 @@ from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from Post.form import CommentCreateForm, PostCreateForm, PostEditForm, ReplyCreateForm
 from Post.models import Comment, LikePost, Post, Reply, Tag
 from django.views import View
+from django.http import JsonResponse
+
+
+class LikeToggleView(LoginRequiredMixin, View):
+    @staticmethod
+    def post(request, *args, **kwargs):
+        post = get_object_or_404(Post, id=kwargs.get("pk"))
+        user_exist = post.likes.filter(id=request.user.id).exists()
+        if post.author != request.user:
+            if user_exist:
+                LikePost.objects.filter(user=request.user, post=post).delete()
+                liked = False
+            else:
+                LikePost.objects.create(user=request.user, post=post)
+                liked = True
+
+            return JsonResponse(
+                {
+                    "liked": liked,
+                    "like_count": post.likes.count(),
+                }
+            )
+        return JsonResponse({"error": "You cannot like your own post."}, status=400)
 
 
 class HomeView(ListView):
@@ -226,40 +249,17 @@ class ReplyDeleteView(LoginRequiredMixin, DeleteView):
         return super().form_valid(form)
 
 
-# def like_post(request, pk):
-#     post = get_object_or_404(Post, id=pk)
-#     like_exists = LikePost.objects.filter(
-#         username=request.user.username, post=post
-#     ).exists()
-#
-#     if post.author != request.user:
-#         if like_exists:
-#             LikePost.objects.filter(user=request.user, post=post).delete()
-#         else:
-#             LikePost.objects.create(user=request.user, post=post)
-#     return render(request, "snippets/likes.html", {"post": post})
+class LikePostView(LikeToggleView):
+    template_name = "snippets/likes_post.html"
+
+    def post(self, request, *args, **kwargs):
+        kwargs["model"] = Post
+        return super().post(request, *args, **kwargs)
 
 
-class LikePostView(View):
+class LikeCommentView(LikeToggleView):
+    template_name = "snippets/likes_comment.html"
 
-    @staticmethod
-    def post(request, pk):
-        post = get_object_or_404(Post, id=pk)
-        like_exists = LikePost.objects.filter(
-            username=request.user.username, post=post
-        ).exists()
-        if post.author != request.user:
-            if like_exists:
-                LikePost.objects.filter(user=request.user, post=post).delete()
-            else:
-                LikePost.objects.create(user=request.user, post=post)
-        return render(request, "snippets/likes_post.html", {"post": post})
-
-    @staticmethod
-    def get(request, pk):
-        post = get_object_or_404(Post, id=pk)
-        return render(request, "snippets/likes_post.html", {"post": post})
-
-
-def like_comment(request, pk):
-    pass
+    def post(self, request, *args, **kwargs):
+        kwargs["model"] = Comment
+        return super().post(request, *args, **kwargs)

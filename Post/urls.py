@@ -11,6 +11,7 @@ from Post.views import (
     ReplyDeleteView,
     ReplySentView,
     LikePostView,
+    LikeCommentView,
 )
 
 urlpatterns = [
@@ -26,6 +27,6 @@ urlpatterns = [
         "comment/<int:pk>/delete/", CommentDeleteView.as_view(), name="comment-delete"
     ),
     path("reply/<int:pk>/delete/", ReplyDeleteView.as_view(), name="reply-delete"),
-    path("post/<int:pk>/like/", LikePostView, name="like-post"),
-    path("comment/<int:pk>/like/", like_comment, name="like-comment"),
+    path("post/like/<int:pk>/", LikePostView, name="like-post"),
+    path("like/comment/<int:pk>/", LikeCommentView.as_view(), name="like_comment"),
 ]

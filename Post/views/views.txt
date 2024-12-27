@@ -233,3 +233,18 @@ def like_comment(request, post):
 @like_toggle(Reply)
 def like_reply(request, post):
     return render(request, 'snippets/likes_reply.html', {'reply' : post })
+
+
+# TODO: function with test written There is no readability in the code at all
+# def like_post(request, pk):
+#     post = get_object_or_404(Post, id=pk)
+#     like_exists = LikePost.objects.filter(
+#         username=request.user.username, post=post
+#     ).exists()
+#
+#     if post.author != request.user:
+#         if like_exists:
+#             LikePost.objects.filter(user=request.user, post=post).delete()
+#         else:
+#             LikePost.objects.create(user=request.user, post=post)
+#     return render(request, "snippets/likes.html", {"post": post})
