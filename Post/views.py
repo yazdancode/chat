@@ -249,7 +249,7 @@ class ReplyDeleteView(LoginRequiredMixin, DeleteView):
         return super().form_valid(form)
 
 
-class LikePostView(LikeToggleView):
+class LikePostView(LikeToggleView, LoginRequiredMixin):
     template_name = "snippets/likes_post.html"
 
     def post(self, request, *args, **kwargs):
@@ -257,7 +257,7 @@ class LikePostView(LikeToggleView):
         return super().post(request, *args, **kwargs)
 
 
-class LikeCommentView(LikeToggleView):
+class LikeCommentView(LikeToggleView, LoginRequiredMixin):
     template_name = "snippets/likes_comment.html"
 
     def post(self, request, *args, **kwargs):
