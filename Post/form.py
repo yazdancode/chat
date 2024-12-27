@@ -145,3 +145,7 @@ class ReplyCreateForm(ModelForm):
                 "required": "لطفاً متن را وارد کنید.",
             },
         }
+
+
+class InboxNewMessageForm(ModelForm):
+    pass

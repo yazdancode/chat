@@ -5,6 +5,7 @@ from django.db import models
 
 class Post(models.Model):
     title = models.CharField(max_length=500)
+    content = models.TextField()
     image = models.URLField(max_length=1000, blank=True, null=True)
     author = models.ForeignKey(
         User, on_delete=models.SET_NULL, null=True, related_name="posts"
@@ -13,10 +14,13 @@ class Post(models.Model):
     url = models.URLField(max_length=500, null=True, blank=True)
     body = models.TextField()
     likes = models.ManyToManyField(
-        User, related_name="liked_posts", blank=True, through="LikePost"
+        User, related_name="liked_posts", blank=True, through="LikedPost"
+    )
+    dislikes = models.ManyToManyField(
+        User, related_name="disliked_posts", blank=True, through="DisLikedPost"
     )
     tags = models.ManyToManyField("Tag", related_name="tagged_posts")
-    created = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField(auto_now_add=True, db_index=True)
     id = models.UUIDField(
         primary_key=True,
         default=uuid.uuid4,
@@ -31,20 +35,32 @@ class Post(models.Model):
         ordering = ["-created"]
 
 
-class LikePost(models.Model):
-    comment = models.ForeignKey(
-        "Comment", on_delete=models.CASCADE, related_name="like_posts"
-    )
+class LikedPost(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="like_posts")
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_likes")
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
-        return f"{self.user.username} liked {self.comment.body[:30]}"
+        return f"{self.user.username} liked {self.post.title[:30]}"
+
+
+# TODO : View this is not fixed
+class DisLikedPost(models.Model):
+    post = models.ForeignKey(
+        Post, on_delete=models.CASCADE, related_name="dislike_posts"
+    )
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="user_dislikes"
+    )
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self) -> str:
+        return f"{self.user.username} disliked {self.post.title[:30]}"
 
 
 class LikedComment(models.Model):
-    post = models.ForeignKey(
-        Post, on_delete=models.CASCADE, related_name="liked_comments"
+    comment = models.ForeignKey(
+        "Comment", on_delete=models.CASCADE, related_name="liked_comments"
     )
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="comment_likes"
@@ -52,7 +68,21 @@ class LikedComment(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
-        return f"{self.user.username} liked {self.post.title}"
+        return f"{self.user.username} liked {self.comment.body[:30]}"
+
+
+# TODO : View this is not fixed
+class DisLikedComment(models.Model):
+    comment = models.ForeignKey(
+        "Comment", on_delete=models.CASCADE, related_name="disliked_comments"
+    )
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="comment_dislikes"
+    )
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self) -> str:
+        return f"{self.user.username} disliked {self.comment.body[:30]}"
 
 
 class Tag(models.Model):
@@ -66,6 +96,8 @@ class Tag(models.Model):
 
     class Meta:
         ordering = ["order"]
+        verbose_name = "Tag"
+        verbose_name_plural = "Tags"
 
 
 class Comment(models.Model):
@@ -79,7 +111,11 @@ class Comment(models.Model):
     likes = models.ManyToManyField(
         User, related_name="liked_comments", through="LikedComment"
     )
-    created = models.DateTimeField(auto_now_add=True)
+    dislikes = models.ManyToManyField(
+        User, related_name="disliked_comments", through="DisLikedComment"
+    )
+    created = models.DateTimeField(auto_now_add=True, db_index=True)
+    content = models.TextField()
     id = models.UUIDField(
         primary_key=True,
         default=uuid.uuid4,
@@ -101,10 +137,16 @@ class Reply(models.Model):
         User, on_delete=models.SET_NULL, null=True, related_name="replies"
     )
     parent_comment = models.ForeignKey(
-        "Comment", on_delete=models.CASCADE, related_name="replies"
+        Comment, on_delete=models.CASCADE, related_name="replies"
     )
     body = models.CharField(max_length=150)
-    created = models.DateTimeField(auto_now_add=True)
+    likes = models.ManyToManyField(
+        User, related_name="liked_replies", through="LikedReply"
+    )
+    dislikes = models.ManyToManyField(
+        User, related_name="disliked_replies", through="DisLikedReply"
+    )
+    created = models.DateTimeField(auto_now_add=True, db_index=True)
     id = models.UUIDField(
         primary_key=True,
         default=uuid.uuid4,
@@ -119,3 +161,29 @@ class Reply(models.Model):
 
     class Meta:
         ordering = ["-created"]
+
+
+class LikedReply(models.Model):
+    reply = models.ForeignKey(
+        Reply, on_delete=models.CASCADE, related_name="liked_replies"
+    )
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="user_liked_replies"
+    )
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self) -> str:
+        return f"{self.user.username} liked {self.reply.body[:30]}"
+
+
+class DisLikedReply(models.Model):
+    reply = models.ForeignKey(
+        Reply, on_delete=models.CASCADE, related_name="disliked_replies"
+    )
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="user_disliked_replies"
+    )
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self) -> str:
+        return f"{self.user.username} disliked {self.reply.body[:30]}"

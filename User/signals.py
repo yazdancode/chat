@@ -5,18 +5,11 @@ from django.dispatch import receiver
 from .models import Profile
 
 
-@receiver(post_save, sender=User, dispatch_uid="create_profile_signal")
-def manage_profile(instance, created, **kwargs) -> None:
-    user = instance
+@receiver(post_save, sender=User)
+def manage_profile(sender, instance, created, **kwargs):
     if created:
-        Profile.objects.create(user=user, email=user.email)
-    else:
-        try:
-            profile = Profile.objects.get(user=user)
-            profile.email = user.email
-            profile.save()
-        except Profile.DoesNotExist:
-            Profile.objects.create(user=user, email=user.email)
+        if not Profile.objects.filter(email=instance.email).exists():
+            Profile.objects.create(user=instance, email=instance.email)
 
 
 @receiver(post_save, sender=Profile, dispatch_uid="update_profile_signal")

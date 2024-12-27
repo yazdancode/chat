@@ -9,8 +9,9 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import View
 from django.views.generic.edit import UpdateView
-from inbox.forms import InboxNewMessageForm
-from Post.form import ReplyCreateForm
+
+# from inbox.forms import InboxNewMessageForm
+from Post.form import ReplyCreateForm, InboxNewMessageForm
 from User.forms import UserForm
 from User.models import Profile, User
 from allauth.account.utils import send_email_confirmation

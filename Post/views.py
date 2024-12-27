@@ -8,31 +8,151 @@ from django.urls import reverse_lazy
 from django.views.generic import DetailView, ListView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from Post.form import CommentCreateForm, PostCreateForm, PostEditForm, ReplyCreateForm
-from Post.models import Comment, LikePost, Post, Reply, Tag
+from Post.models import (
+    Post,
+    LikedPost,
+    DisLikedPost,
+    LikedComment,
+    DisLikedComment,
+    Tag,
+    Comment,
+    Reply,
+    LikedReply,
+    DisLikedReply,
+)
 from django.views import View
 from django.http import JsonResponse
 
 
 class LikeToggleView(LoginRequiredMixin, View):
-    @staticmethod
-    def post(request, *args, **kwargs):
-        post = get_object_or_404(Post, id=kwargs.get("pk"))
-        user_exist = post.likes.filter(id=request.user.id).exists()
-        if post.author != request.user:
-            if user_exist:
-                LikePost.objects.filter(user=request.user, post=post).delete()
-                liked = False
-            else:
-                LikePost.objects.create(user=request.user, post=post)
-                liked = True
+    def post(self, request, *args, **kwargs):
+        post = get_object_or_404(Post, id=kwargs.get("post_id"))
 
+        if post.author == request.user:
+            return JsonResponse({"error": "You cannot like your own post."}, status=400)
+
+        user_liked = post.likes.filter(id=request.user.id).exists()
+
+        if user_liked:
+            LikedPost.objects.filter(user=request.user, post=post).delete()
+            return JsonResponse(
+                {"status": "like_removed", "likes_count": post.likes.count()}
+            )
+        else:
+            LikedPost.objects.create(user=request.user, post=post)
+            return JsonResponse(
+                {"status": "like_added", "likes_count": post.likes.count()}
+            )
+
+
+class DisLikeToggleView(LoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        post = get_object_or_404(Post, id=kwargs.get("post_id"))
+
+        if post.author == request.user:
+            return JsonResponse(
+                {"error": "You cannot dislike your own post."}, status=400
+            )
+
+        user_disliked = post.dislikes.filter(id=request.user.id).exists()
+
+        if user_disliked:
+            DisLikedPost.objects.filter(user=request.user, post=post).delete()
+            return JsonResponse(
+                {"status": "dislike_removed", "dislikes_count": post.dislikes.count()}
+            )
+        else:
+            DisLikedPost.objects.create(user=request.user, post=post)
+            return JsonResponse(
+                {"status": "dislike_added", "dislikes_count": post.dislikes.count()}
+            )
+
+
+class LikedCommentToggleView(LoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        comment = get_object_or_404(Comment, id=kwargs.get("comment_id"))
+        if comment.author == request.user:
+            return JsonResponse(
+                {"error": "You cannot like your own comment."}, status=400
+            )
+
+        user_liked = comment.likes.filter(id=request.user.id).exists()
+        if user_liked:
+            LikedComment.objects.filter(user=request.user, comment=comment).delete()
+            return JsonResponse(
+                {"status": "like_removed", "likes_count": comment.likes.count()}
+            )
+        else:
+            LikedComment.objects.create(user=request.user, comment=comment)
+            return JsonResponse(
+                {"status": "like_added", "likes_count": comment.likes.count()}
+            )
+
+
+class DisLikedCommentToggleView(LoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        comment = get_object_or_404(Comment, id=kwargs.get("comment_id"))
+        if comment.author == request.user:
+            return JsonResponse(
+                {"error": "You cannot dislike your own comment."}, status=400
+            )
+
+        user_disliked = comment.dislikes.filter(id=request.user.id).exists()
+        if user_disliked:
+            DisLikedComment.objects.filter(user=request.user, comment=comment).delete()
             return JsonResponse(
                 {
-                    "liked": liked,
-                    "like_count": post.likes.count(),
+                    "status": "dislike_removed",
+                    "dislikes_count": comment.dislikes.count(),
                 }
             )
-        return JsonResponse({"error": "You cannot like your own post."}, status=400)
+        else:
+            DisLikedComment.objects.create(user=request.user, comment=comment)
+            return JsonResponse(
+                {"status": "dislike_added", "dislikes_count": comment.dislikes.count()}
+            )
+
+
+class LikedReplyToggleView(LoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        post = get_object_or_404(Post, id=kwargs.get("post_id"))
+        if post.author == request.user:
+            return JsonResponse({"error": "You cannot like your own post."}, status=400)
+        user_liked = post.likes.filter(id=request.user.id).exists()
+        if user_liked:
+            LikedReply.objects.filter(user=request.user, post=post).delete()
+            return JsonResponse(
+                {"status": "like_removed", "likes_count": post.likes.count()}
+            )
+        else:
+            LikedReply.objects.create(user=request.user, post=post)
+            return JsonResponse(
+                {"status": "like_added", "likes_count": post.likes.count()}
+            )
+
+
+class DisLikedReplyToggleView(LoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        comment = get_object_or_404(Reply, id=kwargs.get("comment_id"))
+        if comment.author == request.user:
+            return JsonResponse(
+                {"error": "You cannot dislike your own comment."}, status=400
+            )
+
+        user_disliked = comment.dislikes.filter(id=request.user.id).exists()
+        if user_disliked:
+            DisLikedReply.objects.filter(user=request.user, comment=comment).delete()
+            return JsonResponse(
+                {
+                    "status": "dislike_removed",
+                    "dislikes_count": comment.dislikes.count(),
+                }
+            )
+        else:
+            DisLikedReply.objects.create(user=request.user, comment=comment)
+            return JsonResponse(
+                {"status": "dislike_added", "dislikes_count": comment.dislikes.count()}
+            )
 
 
 class HomeView(ListView):
@@ -253,13 +373,74 @@ class LikePostView(LikeToggleView, LoginRequiredMixin):
     template_name = "snippets/likes_post.html"
 
     def post(self, request, *args, **kwargs):
+        post = get_object_or_404(Post, id=kwargs.get("post_id"))
+        response = super().post(request, post_id=kwargs.get("post_id"))
+        if not request.headers.get("x-requested-with") == "XMLHttpRequest":
+            return render(request, self.template_name, {"post": post})
+        return response
+
+
+# TODO : Url this is not fixed
+# TODO : file html this is not fixed
+class DisLikePostView(DisLikeToggleView, LoginRequiredMixin):
+    template_name = "snippets/dislikes_post.html"
+
+    def post(self, request, *args, **kwargs):
         kwargs["model"] = Post
-        return super().post(request, *args, **kwargs)
+        response = super().post(request, *args, **kwargs)
+        if not request.is_ajax():
+            instance = get_object_or_404(Post, id=kwargs.get("pk"))
+            return render(request, self.template_name, {"post": instance})
+        return response
 
 
-class LikeCommentView(LikeToggleView, LoginRequiredMixin):
+class LikeCommentView(LikedCommentToggleView, LoginRequiredMixin):
     template_name = "snippets/likes_comment.html"
 
     def post(self, request, *args, **kwargs):
         kwargs["model"] = Comment
-        return super().post(request, *args, **kwargs)
+        response = super().post(request, *args, **kwargs)
+        if not request.is_ajax():
+            instance = get_object_or_404(Comment, id=kwargs.get("pk"))
+            return render(request, self.template_name, {"comment": instance})
+        return response
+
+
+# TODO : Url this is not fixed
+# TODO : file html this is not fixed
+class disLikeCommentView(DisLikedCommentToggleView, LoginRequiredMixin):
+    template_name = "snippets/dislikes_comment.html"
+
+    def post(self, request, *args, **kwargs):
+        kwargs["model"] = Comment
+        response = super().post(request, *args, **kwargs)
+        if not request.is_ajax():
+            instance = get_object_or_404(Comment, id=kwargs.get("pk"))
+            return render(request, self.template_name, {"comment": instance})
+        return response
+
+
+class LikeReplyView(LikedReplyToggleView, LoginRequiredMixin):
+    template_name = "snippets/likes_reply.html"
+
+    def post(self, request, *args, **kwargs):
+        kwargs["model"] = Reply
+        response = super().post(request, *args, **kwargs)
+        if not request.is_ajax():
+            instance = get_object_or_404(Reply, id=kwargs.get("pk"))
+            return render(request, self.template_name, {"reply": instance})
+        return response
+
+
+# TODO : Url this is not fixed
+# TODO : file html this is not fixed
+class disLikeReplyView(DisLikedReplyToggleView, LoginRequiredMixin):
+    template_name = "snippets/dislikes_reply.html"
+
+    def post(self, request, *args, **kwargs):
+        kwargs["model"] = Reply
+        response = super().post(request, *args, **kwargs)
+        if not request.is_ajax():
+            instance = get_object_or_404(Reply, id=kwargs.get("pk"))
+            return render(request, self.template_name, {"reply": instance})
+        return response
