@@ -1,20 +1,18 @@
+from allauth.account.utils import send_email_confirmation
 from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count
 from django.http import Http404
-from django.shortcuts import get_object_or_404
-from django.shortcuts import redirect
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import View
 from django.views.generic.edit import UpdateView
 
 # from inbox.forms import InboxNewMessageForm
-from Post.form import ReplyCreateForm, InboxNewMessageForm
+from Post.forms import InboxNewMessageForm, ReplyCreateForm
 from User.forms import UserForm
 from User.models import Profile, User
-from allauth.account.utils import send_email_confirmation
 
 
 class ProfileView(View):

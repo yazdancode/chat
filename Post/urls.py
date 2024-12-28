@@ -4,15 +4,19 @@ from Post.views import (
     CommentDeleteView,
     CommentSentView,
     HomeView,
+    LikeCommentView,
+    LikePostView,
+    LikeReplyView,
     PostCreateView,
     PostDeleteView,
     PostEditView,
     PostPageView,
     ReplyDeleteView,
     ReplySentView,
-    LikePostView,
-    LikeCommentView,
-    LikeReplyView,
+    DisLikeReplyView,
+    DisLikeCommentView,
+    DisLikePostView
+
 )
 
 urlpatterns = [
@@ -31,4 +35,8 @@ urlpatterns = [
     path("post/like/<int:pk>/", LikePostView.as_view(), name="like-post"),
     path("like/comment/<int:pk>/", LikeCommentView.as_view(), name="like_comment"),
     path("reply/comment/<int:pk>/", LikeReplyView.as_view(), name="like_reply"),
+    path('dislike/reply/<int:pk>/', DisLikeReplyView.as_view(), name='dislike_reply'),
+    path('dislike/comment/<int:pk>/', DisLikeCommentView.as_view(), name='dislike_comment'),
+    path('dislike/post/<int:pk>/', DisLikePostView.as_view(), name='dislike_post'),
+
 ]

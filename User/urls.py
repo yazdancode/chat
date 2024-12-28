@@ -1,10 +1,10 @@
 from django.urls import path
 
 from User.views import (
-    ProfileView,
-    ProfileEditView,
     ProfileDeleteView,
+    ProfileEditView,
     ProfileVerifyEmailView,
+    ProfileView,
 )
 
 urlpatterns = [
