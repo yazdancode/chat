@@ -5,7 +5,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Count
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
-from django.views.generic import DetailView, ListView
+from django.views import View
+from django.views.generic import ListView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
 from Post.base import (
@@ -115,34 +116,39 @@ class PostEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return super().form_invalid(form)
 
 
-class PostPageView(DetailView):
-    model = Post
-    template_name = "posts/post_page.html"
-    context_object_name = "post"
+class PostPageView(View):
+    template_name = "a_posts/post_page.html"
+    htmx_template_name = "snippets/loop_postpage_comments.html"
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["commentform"] = CommentCreateForm()
-        context["replyform"] = ReplyCreateForm()
-        return context
+    def get(self, request, pk):
+        post = get_object_or_404(Post, id=pk)
+        commentform = CommentCreateForm()
+        replyform = ReplyCreateForm()
 
-    def get(self, request, *args, **kwargs):
         if request.htmx:
-            self.object = self.get_object()
-            if "top" in request.GET:
-                comments = (
-                    self.object.comments.annotate(num_likes=Count("likes"))
-                    .filter(num_likes__gt=0)
-                    .order_by("-num_likes")
-                )
-            else:
-                comments = self.object.comments.all()
+            comments = self.get_comments(request, post)
             return render(
                 request,
-                "snippets/loop_postpage_comments.html",
-                {"comments": comments, "replyform": ReplyCreateForm()},
+                self.htmx_template_name,
+                {"comments": comments, "replyform": replyform},
             )
-        return super().get(request, *args, **kwargs)
+
+        context = {
+            "post": post,
+            "commentform": commentform,
+            "replyform": replyform,
+        }
+        return render(request, self.template_name, context)
+
+    @staticmethod
+    def get_comments(request, post):
+        if "top" in request.GET:
+            return (
+                post.comments.annotate(num_likes=Count("likes"))
+                .filter(num_likes__gt=0)
+                .order_by("-num_likes")
+            )
+        return post.comments.all()
 
 
 class CommentSentView(LoginRequiredMixin, CreateView):

@@ -29,7 +29,8 @@
     </section>
 
     <!-- سایدبار -->
-    {% include 'includes/sidebar.html' %}
+    {% load sidebar %}
+    {% sidebar_view tag  user %}
 
 </main>
 {% endblock %}
