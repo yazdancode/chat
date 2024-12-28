@@ -234,7 +234,7 @@ class ReplyDeleteView(LoginRequiredMixin, DeleteView):
         return super().form_valid(form)
 
 
-class LikePostView(LikeToggleView, LoginRequiredMixin):
+class LikePostView(LikeToggleView, LoginRequiredMixin, ListView):
     template_name = "snippets/likes_post.html"
 
     def post(self, request, *args, **kwargs):
@@ -247,7 +247,7 @@ class LikePostView(LikeToggleView, LoginRequiredMixin):
 
 
 # TODO : file html this is not fixed
-class DisLikePostView(DisLikeToggleView, LoginRequiredMixin):
+class DisLikePostView(DisLikeToggleView, LoginRequiredMixin, ListView):
     template_name = "snippets/dislikes_post.html"
 
     def post(self, request, *args, **kwargs):
@@ -259,7 +259,7 @@ class DisLikePostView(DisLikeToggleView, LoginRequiredMixin):
         return response
 
 
-class LikeCommentView(LikedCommentToggleView, LoginRequiredMixin):
+class LikeCommentView(LikedCommentToggleView, LoginRequiredMixin, ListView):
     template_name = "snippets/likes_comment.html"
 
     def post(self, request, *args, **kwargs):
@@ -273,7 +273,7 @@ class LikeCommentView(LikedCommentToggleView, LoginRequiredMixin):
 
 
 # TODO : file html this is not fixed
-class DisLikeCommentView(DisLikedCommentToggleView, LoginRequiredMixin):
+class DisLikeCommentView(DisLikedCommentToggleView, LoginRequiredMixin, ListView):
     template_name = "snippets/dislikes_comment.html"
 
     def post(self, request, *args, **kwargs):
@@ -285,7 +285,7 @@ class DisLikeCommentView(DisLikedCommentToggleView, LoginRequiredMixin):
         return response
 
 
-class LikeReplyView(LikedReplyToggleView, LoginRequiredMixin):
+class LikeReplyView(LikedReplyToggleView, LoginRequiredMixin, ListView):
     template_name = "snippets/likes_reply.html"
 
     def post(self, request, *args, **kwargs):
@@ -297,8 +297,8 @@ class LikeReplyView(LikedReplyToggleView, LoginRequiredMixin):
         return response
 
 
-# TODO : file html this is not fixed
-class DisLikeReplyView(DisLikedReplyToggleView, LoginRequiredMixin):
+# TODO : file dislikes_reply.html this is not fixed
+class DisLikeReplyView(DisLikedReplyToggleView, LoginRequiredMixin, ListView):
     template_name = "snippets/dislikes_reply.html"
 
     def post(self, request, *args, **kwargs):

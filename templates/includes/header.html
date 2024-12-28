@@ -9,7 +9,6 @@
             </a>
         </div>
 
-        <!-- Mobile Icon -->
         <div class="md:hidden">
             <a @click="mobilenavOpen = !mobilenavOpen" class="h-12 w-12 flex items-center justify-center cursor-pointer hover:bg-gray-700 rounded-lg">
                 <img x-show="!mobilenavOpen" class="w-6 h-6 select-none" src="https://img.icons8.com/small/64/ffffff/menu.png" alt="menu"/>
@@ -40,8 +39,8 @@
                      x-transition:enter-start="opacity-0 -translate-y-5 scale-90"
                      x-transition:enter-end="opacity-100 translate-y-0 scale-100">
                     <ul class="hoverlist [&>li>a]:justify-end">
-                            <li><a href="{% url 'profile' username=user.username %}">پروفایل من</a></li>
-                            <li><a href="{% url 'profile_edit' username=user.username %}">ویرایش پروفایل</a></li>
+                            <li><a href="{% url 'profile'%}">پروفایل من</a></li>
+                            <li><a href="{% url 'profile_edit'%}">ویرایش پروفایل</a></li>
                             <li><a href="{% url 'account_logout' %}">خروج</a></li>
                     </ul>
                 </div>
