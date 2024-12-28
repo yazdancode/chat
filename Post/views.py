@@ -245,7 +245,6 @@ class LikePostView(LikeToggleView, LoginRequiredMixin, ListView):
         return response
 
 
-
 # TODO : file html this is not fixed
 class DisLikePostView(DisLikeToggleView, LoginRequiredMixin, ListView):
     template_name = "snippets/dislikes_post.html"
@@ -269,7 +268,6 @@ class LikeCommentView(LikedCommentToggleView, LoginRequiredMixin, ListView):
             instance = get_object_or_404(Comment, id=kwargs.get("pk"))
             return render(request, self.template_name, {"comment": instance})
         return response
-
 
 
 # TODO : file html this is not fixed

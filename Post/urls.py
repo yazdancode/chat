@@ -15,8 +15,7 @@ from Post.views import (
     ReplySentView,
     DisLikeReplyView,
     DisLikeCommentView,
-    DisLikePostView
-
+    DisLikePostView,
 )
 
 urlpatterns = [
@@ -35,8 +34,11 @@ urlpatterns = [
     path("post/like/<int:pk>/", LikePostView.as_view(), name="like-post"),
     path("like/comment/<int:pk>/", LikeCommentView.as_view(), name="like_comment"),
     path("reply/comment/<int:pk>/", LikeReplyView.as_view(), name="like_reply"),
-    path('dislike/reply/<int:pk>/', DisLikeReplyView.as_view(), name='dislike_reply'),
-    path('dislike/comment/<int:pk>/', DisLikeCommentView.as_view(), name='dislike_comment'),
-    path('dislike/post/<int:pk>/', DisLikePostView.as_view(), name='dislike_post'),
-
+    path("dislike/reply/<int:pk>/", DisLikeReplyView.as_view(), name="dislike_reply"),
+    path(
+        "dislike/comment/<int:pk>/",
+        DisLikeCommentView.as_view(),
+        name="dislike_comment",
+    ),
+    path("dislike/post/<int:pk>/", DisLikePostView.as_view(), name="dislike_post"),
 ]
